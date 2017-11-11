@@ -1,19 +1,26 @@
 module Main exposing (..)
 
-import Html exposing (Html, text, div, img)
-import Html.Attributes exposing (src)
+import Components.ChessBoard as ChessBoard
+import Html exposing (Html, div, img, text)
+import Html.Attributes exposing (class)
 
 
 ---- MODEL ----
 
 
 type alias Model =
-    {}
+    { players : Int
+    , chessBoard : ChessBoard.Model
+    }
 
 
 init : ( Model, Cmd Msg )
 init =
-    ( {}, Cmd.none )
+    ( { players = 0
+      , chessBoard = ChessBoard.initialModel
+      }
+    , Cmd.none
+    )
 
 
 
@@ -22,11 +29,17 @@ init =
 
 type Msg
     = NoOp
+    | ChessBoardMsg ChessBoard.Msg
 
 
 update : Msg -> Model -> ( Model, Cmd Msg )
 update msg model =
-    ( model, Cmd.none )
+    case msg of
+        ChessBoardMsg submsg ->
+            ( model, Cmd.none )
+
+        NoOp ->
+            ( model, Cmd.none )
 
 
 
@@ -35,9 +48,8 @@ update msg model =
 
 view : Model -> Html Msg
 view model =
-    div []
-        [ img [ src "/logo.svg" ] []
-        , div [] [ text "Your Elm App is working!" ]
+    div [ class "app-container" ]
+        [ Html.map ChessBoardMsg <| ChessBoard.view model.chessBoard
         ]
 
 
