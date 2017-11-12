@@ -1,9 +1,14 @@
 module Components.ChessBoard exposing (..)
 
+import DataModels.Bishop as Bishop
 import DataModels.Common exposing (..)
+import DataModels.King as King
+import DataModels.Knight as Knight
 import DataModels.Pawn as Pawn
+import DataModels.Queen as Queen
+import DataModels.Rook as Rook
 import Html exposing (Html, div, text)
-import Html.Attributes exposing (class)
+import Html.Attributes exposing (class, classList)
 
 
 type alias Model =
@@ -17,12 +22,11 @@ type alias Model =
 
 type alias PlayerPieces =
     { pawns : List Pawn.Model
-
-    -- , knights : List Knight
-    -- , bishops : List Bishop
-    -- , rooks : List Rook
-    -- , queen : Queen
-    -- , king : King
+    , knights : List Knight.Model
+    , bishops : List Bishop.Model
+    , rooks : List Rook.Model
+    , queen : Queen.Model
+    , king : King.Model
     }
 
 
@@ -43,14 +47,22 @@ initialModel =
 getInitialWhitePlayerState : PlayerPieces
 getInitialWhitePlayerState =
     { pawns = Pawn.initialWhitePlayerPawnState
-
-    -- , knights : getInitialKn
+    , knights = Knight.initialWhitePlayerKnightState
+    , bishops = Bishop.initialWhitePlayerBishopState
+    , rooks = Rook.initialWhitePlayerRookState
+    , queen = Queen.initialWhitePlayerQueenState
+    , king = King.initialWhitePlayerKingState
     }
 
 
 getInitialBlackPlayerState : PlayerPieces
 getInitialBlackPlayerState =
     { pawns = Pawn.initialBlackPlayerPawnState
+    , knights = Knight.initialBlackPlayerKnightState
+    , bishops = Bishop.initialBlackPlayerBishopState
+    , rooks = Rook.initialBlackPlayerRookState
+    , queen = Queen.initialBlackPlayerQueenState
+    , king = King.initialBlackPlayerKingState
     }
 
 
@@ -64,14 +76,9 @@ view model =
         ]
 
 
-letterItemHtml : String -> Html Msg
+letterItemHtml : BoardLetter -> Html Msg
 letterItemHtml letterText =
-    div [] [ text letterText ]
-
-
-numberItemHtml : Int -> Html Msg
-numberItemHtml numberText =
-    div [] [ text <| toString numberText ]
+    div [] [ text <| getStringFromBoardLetter letterText ]
 
 
 lettersContainerView : Html Msg
@@ -80,42 +87,124 @@ lettersContainerView =
         (List.map letterItemHtml lettersList)
 
 
+numberItemHtml : Int -> Html Msg
+numberItemHtml numberText =
+    div [] [ text <| toString numberText ]
+
+
 numbersContainerView : Html Msg
 numbersContainerView =
     div [ class "numbers-container" ]
-        (List.map numberItemHtml numbersList)
+        (List.map numberItemHtml <| List.reverse numbersList)
 
 
 boardContentsView : Model -> List (Html Msg)
-boardContentsView { boardTiles } =
-    List.indexedMap (\index _ -> boardTileHtml index) <|
+boardContentsView { boardTiles, whitePieces, blackPieces } =
+    List.indexedMap (\index _ -> boardTileHtml index whitePieces blackPieces) <|
         List.repeat boardTiles 0
 
 
-isEven : Int -> Bool
-isEven number =
-    if number % 2 == 0 then
+boardTileHtml : Int -> PlayerPieces -> PlayerPieces -> Html Msg
+boardTileHtml index whitePieces blackPieces =
+    let
+        tileClassList =
+            if isEven (index // 8) then
+                [ ( "board-tile even-row", True ) ]
+            else
+                [ ( "board-tile odd-row", True ) ]
+
+        updatedClassList =
+            tileClassList
+                ++ (if isPawnOnTile whitePieces index then
+                        [ ( "piece whites pawn", True ) ]
+                    else if isBishopOnTile whitePieces index then
+                        [ ( "piece whites bishop", True ) ]
+                    else if isKnightOnTile whitePieces index then
+                        [ ( "piece whites knight", True ) ]
+                    else if isRookOnTile whitePieces index then
+                        [ ( "piece whites rook", True ) ]
+                    else if isQueenOnTile whitePieces index then
+                        [ ( "piece whites queen", True ) ]
+                    else if isKingOnTile whitePieces index then
+                        [ ( "piece whites king", True ) ]
+                    else if isPawnOnTile blackPieces index then
+                        [ ( "piece blacks pawn", True ) ]
+                    else if isBishopOnTile blackPieces index then
+                        [ ( "piece blacks bishop", True ) ]
+                    else if isKnightOnTile blackPieces index then
+                        [ ( "piece blacks knight", True ) ]
+                    else if isRookOnTile blackPieces index then
+                        [ ( "piece blacks rook", True ) ]
+                    else if isQueenOnTile blackPieces index then
+                        [ ( "piece blacks queen", True ) ]
+                    else if isKingOnTile blackPieces index then
+                        [ ( "piece blacks king", True ) ]
+                    else
+                        []
+                   )
+    in
+    div [ classList updatedClassList ] []
+
+
+isPawnOnTile : PlayerPieces -> Int -> Bool
+isPawnOnTile { pawns } index =
+    List.any
+        (\pawn ->
+            if getIndexFromPosition pawn.position == (index + 1) then
+                True
+            else
+                False
+        )
+        pawns
+
+
+isKnightOnTile : PlayerPieces -> Int -> Bool
+isKnightOnTile { knights } index =
+    List.any
+        (\knight ->
+            if getIndexFromPosition knight.position == (index + 1) then
+                True
+            else
+                False
+        )
+        knights
+
+
+isBishopOnTile : PlayerPieces -> Int -> Bool
+isBishopOnTile { bishops } index =
+    List.any
+        (\bishop ->
+            if getIndexFromPosition bishop.position == (index + 1) then
+                True
+            else
+                False
+        )
+        bishops
+
+
+isRookOnTile : PlayerPieces -> Int -> Bool
+isRookOnTile { rooks } index =
+    List.any
+        (\rook ->
+            if getIndexFromPosition rook.position == (index + 1) then
+                True
+            else
+                False
+        )
+        rooks
+
+
+isQueenOnTile : PlayerPieces -> Int -> Bool
+isQueenOnTile { queen } index =
+    if getIndexFromPosition queen.position == (index + 1) then
         True
     else
         False
 
 
-boardTileHtml : Int -> Html Msg
-boardTileHtml index =
-    let
-        tileClassName =
-            if isEven (index // 8) then
-                "board-tile even-row"
-            else
-                "board-tile odd-row"
-    in
-    div [ class tileClassName ] []
-
-
-
--- if index == 0 then
---     div [ class "board-tile white-tile" ] [ text <| toString (isEven (index // 8)) ]
--- else if isEven index then
---     div [ class "board-tile white-tile" ] [ text <| toString (isEven (index // 8)) ]
--- else
---     div [ class "board-tile black-tile" ] [ text <| toString (isEven (index // 8)) ]
+isKingOnTile : PlayerPieces -> Int -> Bool
+isKingOnTile { king } index =
+    if getIndexFromPosition king.position == (index + 1) then
+        True
+    else
+        False

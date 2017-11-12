@@ -10,13 +10,20 @@ import Html.Attributes exposing (class)
 
 type alias Model =
     { players : Int
+    , playerType : PlayerType
     , chessBoard : ChessBoard.Model
     }
+
+
+type PlayerType
+    = White
+    | Black
 
 
 init : ( Model, Cmd Msg )
 init =
     ( { players = 0
+      , playerType = White
       , chessBoard = ChessBoard.initialModel
       }
     , Cmd.none

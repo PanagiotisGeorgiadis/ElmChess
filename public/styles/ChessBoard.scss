@@ -1,26 +1,10 @@
 .chess-board {
     width: 92vh;
     height: 92vh;
-    border: 1px solid black;
+    border: 1px solid #4d4d4d;
     position: relative;
 
     .numbers-container {
-        width: 92vh;
-        height: 25px;
-        display: flex;
-        justify-content: space-between;
-        position: absolute;
-        bottom: -25px;
-
-        div {
-            width: 100%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-    }
-
-    .letters-container {
         width: 25px;
         height: 92vh;
         display: flex;
@@ -31,6 +15,22 @@
 
         div {
             height: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+    }
+
+    .letters-container {
+        width: 92vh;
+        height: 25px;
+        display: flex;
+        justify-content: space-between;
+        position: absolute;
+        bottom: -25px;
+
+        div {
+            width: 100%;
             display: flex;
             align-items: center;
             justify-content: center;
@@ -48,7 +48,7 @@
 
             &.even-row {
                 &:nth-child(even) {
-                    background-color: black;
+                    background-color: #4d4d4d;
                 }
                 &:nth-child(odd) {
                     background-color: white;
@@ -60,11 +60,49 @@
                     background-color: white;
                 }
                 &:nth-child(odd) {
-                    background-color: black;
+                    background-color: #4d4d4d;
                 }
             }
 
+            &.piece {
+                background-image: url('https://upload.wikimedia.org/wikipedia/commons/thumb/b/b2/Chess_Pieces_Sprite.svg/640px-Chess_Pieces_Sprite.svg.png');
+                cursor: pointer;
+            }
+
+            &.whites {
+                background-position-y: 5%;
+            }
+
+            &.blacks {
+                background-position-y: 95%;
+            }
+
+            &.pawn {
+                background-position-x: 99%;
+            }
+
+            &.rook {
+                background-position-x: 79.2%;
+            }
+
+            &.knight {
+                background-position-x: 60%;
+            }
+
+            &.bishop {
+                background-position-x: 40%;
+            }
+
+            &.queen {
+                background-position-x: 20.5%;
+            }
+
+            &.king {
+                background-position-x: 1%;
+            }
         }
     }
+
+
 
 }
