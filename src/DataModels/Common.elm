@@ -7,7 +7,7 @@ type alias Position =
     }
 
 
-type PieceType
+type PieceColor
     = White
     | Black
 
@@ -21,6 +21,24 @@ type BoardLetter
     | F
     | G
     | H
+
+
+type alias BoardTile msg =
+    { type_ : TileType
+    , position : Position
+    , action : msg
+    , color : PieceColor
+    }
+
+
+type TileType
+    = PawnPiece
+    | KnightPiece
+    | BishopPiece
+    | RookPiece
+    | QueenPiece
+    | KingPiece
+    | EmptyPiece
 
 
 lettersList : List BoardLetter
@@ -44,6 +62,26 @@ numbersList =
 totalRows : Int
 totalRows =
     8
+
+
+getLetterFromNumber : Int -> BoardLetter
+getLetterFromNumber number =
+    if number == 0 then
+        A
+    else if number == 1 then
+        B
+    else if number == 2 then
+        C
+    else if number == 3 then
+        D
+    else if number == 4 then
+        E
+    else if number == 5 then
+        F
+    else if number == 6 then
+        G
+    else
+        H
 
 
 getStringFromBoardLetter : BoardLetter -> String
@@ -99,3 +137,14 @@ getIndexFromPosition position =
     (position.x * totalRows)
         + getNumberFromBoardLetter position.y
         - 8
+
+
+getPositionFromIndex : Int -> Position
+getPositionFromIndex index =
+    let
+        row =
+            (index // 8) + 1
+    in
+    { x = row
+    , y = getLetterFromNumber (index % 8)
+    }

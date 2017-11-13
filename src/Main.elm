@@ -1,6 +1,8 @@
 module Main exposing (..)
 
-import Components.ChessBoard as ChessBoard
+import Components.ChessBoard.Model as ChessBoard
+import Components.ChessBoard.Update as ChessBoard
+import Components.ChessBoard.View as ChessBoard
 import Html exposing (Html, div, img, text)
 import Html.Attributes exposing (class)
 
@@ -43,8 +45,17 @@ update : Msg -> Model -> ( Model, Cmd Msg )
 update msg model =
     case msg of
         ChessBoardMsg submsg ->
+            let
+                ( updatedModel, subcmd ) =
+                    ChessBoard.update submsg model.chessBoard
+            in
             ( model, Cmd.none )
 
+        -- ( { model
+        --     | chessBoard = updatedModel
+        --   }
+        -- , Cmd.none
+        -- )
         NoOp ->
             ( model, Cmd.none )
 
