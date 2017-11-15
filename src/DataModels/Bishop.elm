@@ -18,12 +18,12 @@ type Msg
 
 initialWhitePlayerBishopState : List Model
 initialWhitePlayerBishopState =
-    [ { position = { x = 8, y = C }
+    [ { position = { x = 7, y = C }
       , type_ = BishopPiece
       , action = MoveOwnBishop
       , color = White
       }
-    , { position = { x = 8, y = F }
+    , { position = { x = 7, y = F }
       , type_ = BishopPiece
       , action = MoveOwnBishop
       , color = White
@@ -33,12 +33,12 @@ initialWhitePlayerBishopState =
 
 initialBlackPlayerBishopState : List Model
 initialBlackPlayerBishopState =
-    [ { position = { x = 1, y = C }
+    [ { position = { x = 0, y = C }
       , type_ = BishopPiece
       , action = NoOp
       , color = Black
       }
-    , { position = { x = 1, y = F }
+    , { position = { x = 0, y = F }
       , type_ = BishopPiece
       , action = NoOp
       , color = Black
@@ -51,7 +51,7 @@ getStateFromIndex index bishops =
     List.head <|
         List.foldl
             (\bishop result ->
-                if getIndexFromPosition bishop.position == (index + 1) then
+                if getIndexFromPosition bishop.position == index then
                     bishop :: result
                 else
                     result

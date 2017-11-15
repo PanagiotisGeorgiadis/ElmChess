@@ -18,12 +18,12 @@ type Msg
 
 initialWhitePlayerKnightState : List Model
 initialWhitePlayerKnightState =
-    [ { position = { x = 8, y = B }
+    [ { position = { x = 7, y = B }
       , type_ = KnightPiece
       , action = MoveOwnKnight
       , color = White
       }
-    , { position = { x = 8, y = G }
+    , { position = { x = 7, y = G }
       , type_ = KnightPiece
       , action = MoveOwnKnight
       , color = White
@@ -33,12 +33,12 @@ initialWhitePlayerKnightState =
 
 initialBlackPlayerKnightState : List Model
 initialBlackPlayerKnightState =
-    [ { position = { x = 1, y = B }
+    [ { position = { x = 0, y = B }
       , type_ = KnightPiece
       , action = NoOp
       , color = Black
       }
-    , { position = { x = 1, y = G }
+    , { position = { x = 0, y = G }
       , type_ = KnightPiece
       , action = NoOp
       , color = Black
@@ -51,7 +51,7 @@ getStateFromIndex index knights =
     List.head <|
         List.foldl
             (\knight result ->
-                if getIndexFromPosition knight.position == (index + 1) then
+                if getIndexFromPosition knight.position == index then
                     knight :: result
                 else
                     result

@@ -25,27 +25,21 @@ getEmptyTileState index =
     { type_ = EmptyPiece
     , position = getPositionFromIndex index
     , action = NoOp
-    , color = White
+    , color = NoColor
     }
 
 
 initialModel : Model
 initialModel =
-    { boardTiles = 8 * 8
-    , whitePoints = 0
-    , blackPoints = 0
-    , boardState = getInitialBoardState
+    { boardTiles = getInitialBoardState
     }
 
 
 getInitialBoardState : List (BoardTile Msg)
 getInitialBoardState =
-    let
-        boardState =
-            List.indexedMap getTileState <|
-                List.repeat 64 0
-    in
-    boardState
+    List.map
+        (\index -> getTileState index ())
+        (List.range 1 64)
 
 
 getTileState : Int -> a -> BoardTile Msg
@@ -61,7 +55,7 @@ getTileState index _ =
             if isPawnOnTile whitePieces index then
                 case Pawn.getStateFromIndex index whitePieces.pawns of
                     Just { type_, position, action, color } ->
-                        BoardTile type_ position (PawnMsg action) color
+                        BoardTile type_ position (PawnMsg (Pawn.resolveAction index action)) color
 
                     Nothing ->
                         getEmptyTileState index
@@ -103,7 +97,7 @@ getTileState index _ =
             else if isPawnOnTile blackPieces index then
                 case Pawn.getStateFromIndex index blackPieces.pawns of
                     Just { type_, position, action, color } ->
-                        BoardTile type_ position (PawnMsg action) color
+                        BoardTile type_ position (PawnMsg (Pawn.resolveAction index action)) color
 
                     Nothing ->
                         getEmptyTileState index
@@ -174,7 +168,7 @@ isPawnOnTile : PlayerPieces -> Int -> Bool
 isPawnOnTile { pawns } index =
     List.any
         (\pawn ->
-            if getIndexFromPosition pawn.position == (index + 1) then
+            if getIndexFromPosition pawn.position == index then
                 True
             else
                 False
@@ -186,7 +180,7 @@ isKnightOnTile : PlayerPieces -> Int -> Bool
 isKnightOnTile { knights } index =
     List.any
         (\knight ->
-            if getIndexFromPosition knight.position == (index + 1) then
+            if getIndexFromPosition knight.position == index then
                 True
             else
                 False
@@ -198,7 +192,7 @@ isBishopOnTile : PlayerPieces -> Int -> Bool
 isBishopOnTile { bishops } index =
     List.any
         (\bishop ->
-            if getIndexFromPosition bishop.position == (index + 1) then
+            if getIndexFromPosition bishop.position == index then
                 True
             else
                 False
@@ -210,7 +204,7 @@ isRookOnTile : PlayerPieces -> Int -> Bool
 isRookOnTile { rooks } index =
     List.any
         (\rook ->
-            if getIndexFromPosition rook.position == (index + 1) then
+            if getIndexFromPosition rook.position == index then
                 True
             else
                 False
@@ -220,7 +214,7 @@ isRookOnTile { rooks } index =
 
 isQueenOnTile : PlayerPieces -> Int -> Bool
 isQueenOnTile { queen } index =
-    if getIndexFromPosition queen.position == (index + 1) then
+    if getIndexFromPosition queen.position == index then
         True
     else
         False
@@ -228,7 +222,7 @@ isQueenOnTile { queen } index =
 
 isKingOnTile : PlayerPieces -> Int -> Bool
 isKingOnTile { king } index =
-    if getIndexFromPosition king.position == (index + 1) then
+    if getIndexFromPosition king.position == index then
         True
     else
         False

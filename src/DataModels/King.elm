@@ -18,7 +18,7 @@ type Msg
 
 initialWhitePlayerKingState : Model
 initialWhitePlayerKingState =
-    { position = { x = 8, y = E }
+    { position = { x = 7, y = E }
     , type_ = KingPiece
     , action = MoveOwnKing
     , color = White
@@ -27,7 +27,7 @@ initialWhitePlayerKingState =
 
 initialBlackPlayerKingState : Model
 initialBlackPlayerKingState =
-    { position = { x = 1, y = E }
+    { position = { x = 0, y = E }
     , type_ = KingPiece
     , action = NoOp
     , color = Black
@@ -36,7 +36,7 @@ initialBlackPlayerKingState =
 
 getStateFromIndex : Int -> Model -> Maybe Model
 getStateFromIndex index king =
-    if getIndexFromPosition king.position == (index + 1) then
+    if getIndexFromPosition king.position == index then
         Just king
     else
         Nothing

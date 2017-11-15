@@ -10,14 +10,7 @@ import DataModels.Rook as Rook
 
 
 type alias Model =
-    { boardTiles : Int
-
-    -- , whitePieces : PlayerPieces
-    , whitePoints : Int
-
-    -- , blackPieces : PlayerPieces
-    , blackPoints : Int
-    , boardState : List (BoardTile Msg)
+    { boardTiles : List (BoardTile Msg)
     }
 
 
@@ -36,7 +29,24 @@ update msg model =
     case msg of
         PawnMsg submsg ->
             case submsg of
-                Pawn.MoveOwnPawn ->
+                Pawn.RevealPawnMovement index ->
+                    let
+                        instructions =
+                            Pawn.movementInstructions <| getPositionFromIndex index
+
+                        updatedBoardTiles =
+                            List.foldl
+                                (\instruction result ->
+                                    revealBoardTile result instruction (PawnMsg (Pawn.MovePawn instruction))
+                                )
+                                model.boardTiles
+                                instructions
+                    in
+                    ( model
+                    , Cmd.none
+                    )
+
+                Pawn.MovePawn position ->
                     ( model, Cmd.none )
 
                 Pawn.NoOp ->
@@ -59,3 +69,39 @@ update msg model =
 
         NoOp ->
             ( model, Cmd.none )
+
+
+getTileFromIndex : Int -> List (BoardTile Msg) -> Maybe (BoardTile Msg)
+getTileFromIndex index boardTiles =
+    List.head <|
+        List.reverse <|
+            List.take index boardTiles
+
+
+updateTileOnPosition : Int -> List (BoardTile Msg) -> List (BoardTile Msg)
+updateTileOnPosition index boardTiles =
+    let
+        listBody =
+            List.take (index - 1) boardTiles
+
+        listTail =
+            List.drop index boardTiles
+
+        selectedItem =
+            List.head <| List.drop (index - 1) boardTiles
+    in
+    case selectedItem of
+        Just item ->
+            let
+                updatedItem =
+                    { item
+                        | type_ = KingPiece
+                    }
+
+                updatedBoardTiles =
+                    List.append listBody <| updatedItem :: listTail
+            in
+            updatedBoardTiles
+
+        Nothing ->
+            boardTiles

@@ -18,12 +18,12 @@ type Msg
 
 initialWhitePlayerRookState : List Model
 initialWhitePlayerRookState =
-    [ { position = { x = 8, y = A }
+    [ { position = { x = 7, y = A }
       , type_ = RookPiece
       , action = MoveOwnRook
       , color = White
       }
-    , { position = { x = 8, y = H }
+    , { position = { x = 7, y = H }
       , type_ = RookPiece
       , action = MoveOwnRook
       , color = White
@@ -33,12 +33,12 @@ initialWhitePlayerRookState =
 
 initialBlackPlayerRookState : List Model
 initialBlackPlayerRookState =
-    [ { position = { x = 1, y = A }
+    [ { position = { x = 0, y = A }
       , type_ = RookPiece
       , action = NoOp
       , color = Black
       }
-    , { position = { x = 1, y = H }
+    , { position = { x = 0, y = H }
       , type_ = RookPiece
       , action = NoOp
       , color = Black
@@ -51,7 +51,7 @@ getStateFromIndex index rooks =
     List.head <|
         List.foldl
             (\rook result ->
-                if getIndexFromPosition rook.position == (index + 1) then
+                if getIndexFromPosition rook.position == index then
                     rook :: result
                 else
                     result

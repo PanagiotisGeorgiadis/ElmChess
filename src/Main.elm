@@ -49,7 +49,11 @@ update msg model =
                 ( updatedModel, subcmd ) =
                     ChessBoard.update submsg model.chessBoard
             in
-            ( model, Cmd.none )
+            ( { model
+                | chessBoard = updatedModel
+              }
+            , Cmd.none
+            )
 
         -- ( { model
         --     | chessBoard = updatedModel

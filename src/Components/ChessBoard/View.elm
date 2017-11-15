@@ -42,12 +42,12 @@ view model =
 
 
 boardContentsView : Model -> List (Html Msg)
-boardContentsView { boardState } =
-    List.indexedMap boardTileHtml boardState
+boardContentsView { boardTiles } =
+    List.indexedMap boardTileHtml boardTiles
 
 
 boardTileHtml : Int -> BoardTile Msg -> Html Msg
-boardTileHtml index boardState =
+boardTileHtml index boardTile =
     let
         rowClassList =
             if isEven (index // 8) then
@@ -56,74 +56,27 @@ boardTileHtml index boardState =
                 [ ( "board-tile odd-row", True ) ]
 
         colorClassList =
-            if boardState.color == White then
+            if boardTile.color == White then
                 [ ( "whites", True ) ]
-            else
+            else if boardTile.color == Black then
                 [ ( "blacks", True ) ]
+            else
+                []
 
         pieceClassList =
-            if boardState.type_ == PawnPiece then
+            if boardTile.type_ == PawnPiece then
                 [ ( "piece pawn", True ) ]
-            else if boardState.type_ == KnightPiece then
+            else if boardTile.type_ == KnightPiece then
                 [ ( "piece knight", True ) ]
-            else if boardState.type_ == BishopPiece then
+            else if boardTile.type_ == BishopPiece then
                 [ ( "piece bishop", True ) ]
-            else if boardState.type_ == RookPiece then
+            else if boardTile.type_ == RookPiece then
                 [ ( "piece rook", True ) ]
-            else if boardState.type_ == QueenPiece then
+            else if boardTile.type_ == QueenPiece then
                 [ ( "piece queen", True ) ]
-            else if boardState.type_ == KingPiece then
+            else if boardTile.type_ == KingPiece then
                 [ ( "piece king", True ) ]
             else
                 []
     in
-    div [ classList (rowClassList ++ pieceClassList ++ colorClassList), onClick boardState.action ] []
-
-
-
--- boardContentsView : Model -> List (Html Msg)
--- boardContentsView { boardTiles, whitePieces, blackPieces } =
---     List.indexedMap (\index _ -> boardTileHtml index whitePieces blackPieces) <|
---         List.repeat boardTiles 0
---
---
--- boardTileHtml : Int -> PlayerPieces -> PlayerPieces -> Html Msg
--- boardTileHtml index whitePieces blackPieces =
---     let
---         tileClassList =
---             if isEven (index // 8) then
---                 [ ( "board-tile even-row", True ) ]
---             else
---                 [ ( "board-tile odd-row", True ) ]
---
---         updatedClassList =
---             tileClassList
---                 ++ (if isPawnOnTile whitePieces index then
---                         [ ( "piece whites pawn", True ) ]
---                     else if isBishopOnTile whitePieces index then
---                         [ ( "piece whites bishop", True ) ]
---                     else if isKnightOnTile whitePieces index then
---                         [ ( "piece whites knight", True ) ]
---                     else if isRookOnTile whitePieces index then
---                         [ ( "piece whites rook", True ) ]
---                     else if isQueenOnTile whitePieces index then
---                         [ ( "piece whites queen", True ) ]
---                     else if isKingOnTile whitePieces index then
---                         [ ( "piece whites king", True ) ]
---                     else if isPawnOnTile blackPieces index then
---                         [ ( "piece blacks pawn", True ) ]
---                     else if isBishopOnTile blackPieces index then
---                         [ ( "piece blacks bishop", True ) ]
---                     else if isKnightOnTile blackPieces index then
---                         [ ( "piece blacks knight", True ) ]
---                     else if isRookOnTile blackPieces index then
---                         [ ( "piece blacks rook", True ) ]
---                     else if isQueenOnTile blackPieces index then
---                         [ ( "piece blacks queen", True ) ]
---                     else if isKingOnTile blackPieces index then
---                         [ ( "piece blacks king", True ) ]
---                     else
---                         []
---                    )
---     in
---     div [ classList updatedClassList ] []
+    div [ classList (rowClassList ++ pieceClassList ++ colorClassList), onClick boardTile.action ] [ text <| toString <| index + 1 ]

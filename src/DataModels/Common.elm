@@ -10,6 +10,7 @@ type alias Position =
 type PieceColor
     = White
     | Black
+    | NoColor
 
 
 type BoardLetter
@@ -39,6 +40,7 @@ type TileType
     | QueenPiece
     | KingPiece
     | EmptyPiece
+    | RevealedPiece
 
 
 lettersList : List BoardLetter
@@ -56,7 +58,7 @@ lettersList =
 
 numbersList : List Int
 numbersList =
-    List.range 1 8
+    List.range 1 totalRows
 
 
 totalRows : Int
@@ -66,19 +68,19 @@ totalRows =
 
 getLetterFromNumber : Int -> BoardLetter
 getLetterFromNumber number =
-    if number == 0 then
+    if number == 1 then
         A
-    else if number == 1 then
-        B
     else if number == 2 then
-        C
+        B
     else if number == 3 then
-        D
+        C
     else if number == 4 then
-        E
+        D
     else if number == 5 then
-        F
+        E
     else if number == 6 then
+        F
+    else if number == 7 then
         G
     else
         H
@@ -136,15 +138,80 @@ getIndexFromPosition : Position -> Int
 getIndexFromPosition position =
     (position.x * totalRows)
         + getNumberFromBoardLetter position.y
-        - 8
 
 
 getPositionFromIndex : Int -> Position
 getPositionFromIndex index =
-    let
-        row =
-            (index // 8) + 1
-    in
-    { x = row
+    { x = index // 8
     , y = getLetterFromNumber (index % 8)
     }
+
+
+getPrecedingBoardTilesFromPosition : List (BoardTile msg) -> Position -> List (BoardTile msg)
+getPrecedingBoardTilesFromPosition boardTiles position =
+    let
+        index =
+            getIndexFromPosition position
+
+        precedingBoardTiles =
+            List.take index boardTiles
+
+        _ =
+            Debug.log "precedingLength" <| List.length precedingBoardTiles
+
+        _ =
+            Debug.log "head" <| List.head precedingBoardTiles
+    in
+    precedingBoardTiles
+
+
+getFollowingBoardTilesFromPosition : List (BoardTile msg) -> Position -> List (BoardTile msg)
+getFollowingBoardTilesFromPosition boardTiles position =
+    let
+        index =
+            getIndexFromPosition position
+
+        followingBoardTiles =
+            List.drop index boardTiles
+
+        _ =
+            Debug.log "followingLength" <| List.length followingBoardTiles
+
+        _ =
+            Debug.log "head" <| List.head followingBoardTiles
+    in
+    followingBoardTiles
+
+
+getPrecedingBoardTilesFromIndex : List (BoardTile msg) -> Int -> List (BoardTile msg)
+getPrecedingBoardTilesFromIndex boardTiles index =
+    let
+        _ =
+            Debug.log "" ""
+    in
+    boardTiles
+
+
+revealBoardTile : List (BoardTile msg) -> Position -> msg -> List (BoardTile msg)
+revealBoardTile boardTiles position action =
+    let
+        precedingBoardTiles =
+            getPrecedingBoardTilesFromPosition boardTiles position
+
+        followingBoardTilesFromPosition =
+            getFollowingBoardTilesFromPosition boardTiles position
+
+        -- updatedBoardTiles =
+        -- precedingBoardTiles
+    in
+    boardTiles
+
+
+
+-- updateBoardTile : BoardTile msg -> Position -> BoardTile msg
+-- updateBoardTile boardTile position action type_ =
+--     let
+--         _ =
+--             Debug.log "boardTile" boardTile
+--     in
+--     boardTile
