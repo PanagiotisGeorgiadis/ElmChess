@@ -45,6 +45,7 @@
 
         .board-tile {
             width: calc(12.5%);
+            position: relative;
 
             &.even-row {
                 &:nth-child(even) {
@@ -100,6 +101,24 @@
             &.king {
                 background-position-x: 1%;
             }
+
+            &.revealed {
+                &:after {
+                    content: '';
+                    width: 20px;
+                    height: 20px;
+                    position: absolute;
+                    left: calc(50% - 10px);
+                    top: calc(50% - 10px);
+                    background-color: lightgreen;
+                    border-radius: 50%;
+                }
+            }
+
+            /* Might use this implementation istead of the dot.
+            &.available {
+                box-shadow: inset 0px 0px 10px 7px rgba(0,0,0,0.35)
+            }*/
         }
     }
 
