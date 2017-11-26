@@ -38,12 +38,12 @@ isPieceOnTile boardTiles index =
 getInitialBoardState : List (BoardTile BoardTileMsg)
 getInitialBoardState =
     List.map
-        getTileState
+        getInitialTileState
         (List.range 1 64)
 
 
-getTileState : Int -> BoardTile BoardTileMsg
-getTileState index =
+getInitialTileState : Int -> BoardTile BoardTileMsg
+getInitialTileState index =
     let
         whitePieces =
             getInitialWhitePlayerState
