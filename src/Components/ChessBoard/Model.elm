@@ -10,17 +10,7 @@ import DataModels.Queen as Queen
 import DataModels.Rook as Rook
 
 
-type alias PlayerPieces =
-    { pawns : List Pawn.Model
-    , knights : List Knight.Model
-    , bishops : List Bishop.Model
-    , rooks : List Rook.Model
-    , queens : List Queen.Model
-    , kings : List King.Model
-    }
-
-
-getEmptyTileState : Int -> BoardTile Msg
+getEmptyTileState : Int -> BoardTile BoardTileMsg
 getEmptyTileState index =
     { type_ = EmptyPiece
     , position = getPositionFromIndex index
@@ -36,14 +26,23 @@ initialModel =
     }
 
 
-getInitialBoardState : List (BoardTile Msg)
+isPieceOnTile : List (BoardTile BoardTileMsg) -> Int -> Bool
+isPieceOnTile boardTiles index =
+    List.any
+        (\boardTile ->
+            getIndexFromPosition boardTile.position == index
+        )
+        boardTiles
+
+
+getInitialBoardState : List (BoardTile BoardTileMsg)
 getInitialBoardState =
     List.map
         getTileState
         (List.range 1 64)
 
 
-getTileState : Int -> BoardTile Msg
+getTileState : Int -> BoardTile BoardTileMsg
 getTileState index =
     let
         whitePieces =
@@ -52,123 +51,49 @@ getTileState index =
         blackPieces =
             getInitialBlackPlayerState
 
+        isWhitePieceTile =
+            isPieceOnTile whitePieces index
+
+        isBlackPieceTile =
+            isPieceOnTile blackPieces index
+
         tileState =
-            if isPieceOnTile whitePieces.pawns index then
-                case Pawn.getStateFromIndex index whitePieces.pawns of
-                    Just { type_, position, action, color } ->
-                        BoardTile type_ position (PawnMsg (Pawn.resolveAction index action)) color
-
-                    Nothing ->
-                        getEmptyTileState index
-            else if isPieceOnTile whitePieces.bishops index then
-                case Bishop.getStateFromIndex index whitePieces.bishops of
-                    Just { type_, position, action, color } ->
-                        BoardTile type_ position (BishopMsg action) color
-
-                    Nothing ->
-                        getEmptyTileState index
-            else if isPieceOnTile whitePieces.knights index then
-                case Knight.getStateFromIndex index whitePieces.knights of
-                    Just { type_, position, action, color } ->
-                        BoardTile type_ position (KnightMsg action) color
-
-                    Nothing ->
-                        getEmptyTileState index
-            else if isPieceOnTile whitePieces.rooks index then
-                case Rook.getStateFromIndex index whitePieces.rooks of
-                    Just { type_, position, action, color } ->
-                        BoardTile type_ position (RookMsg action) color
-
-                    Nothing ->
-                        getEmptyTileState index
-            else if isPieceOnTile whitePieces.queens index then
-                case Queen.getStateFromIndex index whitePieces.queens of
-                    Just { type_, position, action, color } ->
-                        BoardTile type_ position (QueenMsg action) color
-
-                    Nothing ->
-                        getEmptyTileState index
-            else if isPieceOnTile whitePieces.kings index then
-                case King.getStateFromIndex index whitePieces.kings of
-                    Just { type_, position, action, color } ->
-                        BoardTile type_ position (KingMsg action) color
-
-                    Nothing ->
-                        getEmptyTileState index
-            else if isPieceOnTile blackPieces.pawns index then
-                case Pawn.getStateFromIndex index blackPieces.pawns of
-                    Just { type_, position, action, color } ->
-                        BoardTile type_ position (PawnMsg (Pawn.resolveAction index action)) color
-
-                    Nothing ->
-                        getEmptyTileState index
-            else if isPieceOnTile blackPieces.bishops index then
-                case Bishop.getStateFromIndex index blackPieces.bishops of
-                    Just { type_, position, action, color } ->
-                        BoardTile type_ position (BishopMsg action) color
-
-                    Nothing ->
-                        getEmptyTileState index
-            else if isPieceOnTile blackPieces.knights index then
-                case Knight.getStateFromIndex index blackPieces.knights of
-                    Just { type_, position, action, color } ->
-                        BoardTile type_ position (KnightMsg action) color
-
-                    Nothing ->
-                        getEmptyTileState index
-            else if isPieceOnTile blackPieces.rooks index then
-                case Rook.getStateFromIndex index blackPieces.rooks of
-                    Just { type_, position, action, color } ->
-                        BoardTile type_ position (RookMsg action) color
-
-                    Nothing ->
-                        getEmptyTileState index
-            else if isPieceOnTile blackPieces.queens index then
-                case Queen.getStateFromIndex index blackPieces.queens of
-                    Just { type_, position, action, color } ->
-                        BoardTile type_ position (QueenMsg action) color
-
-                    Nothing ->
-                        getEmptyTileState index
-            else if isPieceOnTile blackPieces.kings index then
-                case King.getStateFromIndex index blackPieces.kings of
-                    Just { type_, position, action, color } ->
-                        BoardTile type_ position (KingMsg action) color
-
-                    Nothing ->
-                        getEmptyTileState index
+            if isWhitePieceTile then
+                getPieceStateFromIndex whitePieces index
+            else if isBlackPieceTile then
+                getPieceStateFromIndex blackPieces index
             else
                 getEmptyTileState index
     in
     tileState
 
 
-getInitialWhitePlayerState : PlayerPieces
+getInitialWhitePlayerState : List (BoardTile BoardTileMsg)
 getInitialWhitePlayerState =
-    { pawns = Pawn.initialWhitePlayerPawnState
-    , knights = Knight.initialWhitePlayerKnightState
-    , bishops = Bishop.initialWhitePlayerBishopState
-    , rooks = Rook.initialWhitePlayerRookState
-    , queens = Queen.initialWhitePlayerQueenState
-    , kings = King.initialWhitePlayerKingState
-    }
+    List.append Pawn.initialWhitePlayerState <|
+        List.append Bishop.initialWhitePlayerState <|
+            List.append Knight.initialWhitePlayerState <|
+                List.append Rook.initialWhitePlayerState <|
+                    List.append Queen.initialWhitePlayerState King.initialWhitePlayerState
 
 
-getInitialBlackPlayerState : PlayerPieces
+getInitialBlackPlayerState : List (BoardTile BoardTileMsg)
 getInitialBlackPlayerState =
-    { pawns = Pawn.initialBlackPlayerPawnState
-    , knights = Knight.initialBlackPlayerKnightState
-    , bishops = Bishop.initialBlackPlayerBishopState
-    , rooks = Rook.initialBlackPlayerRookState
-    , queens = Queen.initialBlackPlayerQueenState
-    , kings = King.initialBlackPlayerKingState
-    }
+    List.append Pawn.initialBlackPlayerState <|
+        List.append Bishop.initialBlackPlayerState <|
+            List.append Knight.initialBlackPlayerState <|
+                List.append Rook.initialBlackPlayerState <|
+                    List.append Queen.initialBlackPlayerState King.initialBlackPlayerState
 
 
-isPieceOnTile : List { a | position : Position } -> Int -> Bool
-isPieceOnTile pieceList index =
-    List.any
-        (\piece ->
-            getIndexFromPosition piece.position == index
+getPieceStateFromIndex : List (BoardTile BoardTileMsg) -> Int -> BoardTile BoardTileMsg
+getPieceStateFromIndex boardTiles index =
+    List.foldl
+        (\piece emptyPiece ->
+            if getIndexFromPosition piece.position == index then
+                piece
+            else
+                emptyPiece
         )
-        pieceList
+        (getEmptyTileState index)
+        boardTiles

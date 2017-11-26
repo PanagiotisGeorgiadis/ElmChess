@@ -3,36 +3,23 @@ module DataModels.Rook exposing (..)
 import DataModels.Common exposing (..)
 
 
-type alias Model =
-    { type_ : TileType
-    , position : Position
-    , action : Msg
-    , color : PieceColor
-    }
-
-
-type Msg
-    = NoOp
-    | MoveOwnRook
-
-
-initialWhitePlayerRookState : List Model
-initialWhitePlayerRookState =
+initialWhitePlayerState : List (BoardTile BoardTileMsg)
+initialWhitePlayerState =
     [ { position = { x = 7, y = A }
       , type_ = RookPiece
-      , action = MoveOwnRook
+      , action = RevealRookMovement (getIndexFromPosition { x = 7, y = A })
       , color = White
       }
     , { position = { x = 7, y = H }
       , type_ = RookPiece
-      , action = MoveOwnRook
+      , action = RevealRookMovement (getIndexFromPosition { x = 7, y = H })
       , color = White
       }
     ]
 
 
-initialBlackPlayerRookState : List Model
-initialBlackPlayerRookState =
+initialBlackPlayerState : List (BoardTile BoardTileMsg)
+initialBlackPlayerState =
     [ { position = { x = 0, y = A }
       , type_ = RookPiece
       , action = NoOp
@@ -44,17 +31,3 @@ initialBlackPlayerRookState =
       , color = Black
       }
     ]
-
-
-getStateFromIndex : Int -> List Model -> Maybe Model
-getStateFromIndex index rooks =
-    List.head <|
-        List.foldl
-            (\rook result ->
-                if getIndexFromPosition rook.position == index then
-                    rook :: result
-                else
-                    result
-            )
-            []
-            rooks

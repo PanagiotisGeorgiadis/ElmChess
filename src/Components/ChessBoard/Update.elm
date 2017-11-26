@@ -10,30 +10,24 @@ import DataModels.Rook as Rook
 
 
 type alias Model =
-    { boardTiles : List (BoardTile Msg)
-    , selectedPiece : Maybe (BoardTile Msg)
+    { boardTiles : List (BoardTile BoardTileMsg)
+    , selectedPiece : Maybe (BoardTile BoardTileMsg)
     }
 
 
 type Msg
-    = NoOp
-    | PawnMsg Pawn.Msg
-    | KnightMsg Knight.Msg
-    | BishopMsg Bishop.Msg
-    | RookMsg Rook.Msg
-    | QueenMsg Queen.Msg
-    | KingMsg King.Msg
+    = BoardTileMsg BoardTileMsg
 
 
 update : Msg -> Model -> ( Model, Cmd Msg )
 update msg model =
     case msg of
-        PawnMsg submsg ->
+        BoardTileMsg submsg ->
             case submsg of
-                Pawn.RevealPawnMovement index ->
+                RevealPawnMovement index ->
                     let
                         instructions =
-                            Pawn.movementInstructions <|
+                            Pawn.getMovementInstructions <|
                                 getPositionFromIndex index
 
                         updatedBoardTiles =
@@ -53,7 +47,12 @@ update msg model =
                                                     getIndexFromPosition tile.position
                                             in
                                             if instructionIndex == tileIndex then
-                                                BoardTile RevealedPiece tile.position (PawnMsg (Pawn.MovePawn tile.position)) tile.color
+                                                case tile.type_ of
+                                                    EmptyPiece ->
+                                                        BoardTile RevealedPiece tile.position (MovePawn tile.position) tile.color
+
+                                                    _ ->
+                                                        tile
                                             else
                                                 tile
                                         )
@@ -69,7 +68,7 @@ update msg model =
                     , Cmd.none
                     )
 
-                Pawn.MovePawn position ->
+                MovePawn position ->
                     let
                         updatedBoardTiles =
                             case model.selectedPiece of
@@ -89,7 +88,7 @@ update msg model =
                                             if boardTileIndex == selectedPieceIndex then
                                                 BoardTile EmptyPiece boardTile.position NoOp NoColor
                                             else if boardTileIndex == targetTileIndex then
-                                                BoardTile PawnPiece boardTile.position (PawnMsg (Pawn.RevealPawnMovement boardTileIndex)) boardTile.color
+                                                BoardTile PawnPiece boardTile.position (RevealPawnMovement boardTileIndex) boardTile.color
                                             else
                                                 resetBoardTileType boardTile
                                         )
@@ -105,63 +104,18 @@ update msg model =
                     , Cmd.none
                     )
 
-                Pawn.NoOp ->
+                _ ->
                     ( model, Cmd.none )
 
-        KnightMsg submsg ->
-            ( model, Cmd.none )
 
-        BishopMsg submsg ->
-            ( model, Cmd.none )
-
-        RookMsg submsg ->
-            ( model, Cmd.none )
-
-        QueenMsg submsg ->
-            ( model, Cmd.none )
-
-        KingMsg submsg ->
-            ( model, Cmd.none )
-
-        NoOp ->
-            ( model, Cmd.none )
-
-
-getTileFromIndex : Int -> List (BoardTile Msg) -> Maybe (BoardTile Msg)
+getTileFromIndex : Int -> List (BoardTile BoardTileMsg) -> Maybe (BoardTile BoardTileMsg)
 getTileFromIndex index boardTiles =
     List.head <|
         List.reverse <|
             List.take index boardTiles
 
 
-updateTileOnPosition : Int -> List (BoardTile Msg) -> List (BoardTile Msg)
-updateTileOnPosition index boardTiles =
-    let
-        listBody =
-            List.take (index - 1) boardTiles
-
-        listTail =
-            List.drop index boardTiles
-
-        selectedItem =
-            List.head <| List.drop (index - 1) boardTiles
-    in
-    case selectedItem of
-        Just item ->
-            let
-                updatedItem =
-                    { item | type_ = KingPiece }
-
-                updatedBoardTiles =
-                    List.append listBody <| updatedItem :: listTail
-            in
-            updatedBoardTiles
-
-        Nothing ->
-            boardTiles
-
-
-resetBoardTileType : BoardTile Msg -> BoardTile Msg
+resetBoardTileType : BoardTile BoardTileMsg -> BoardTile BoardTileMsg
 resetBoardTileType tile =
     if tile.type_ == RevealedPiece then
         { tile | type_ = EmptyPiece }

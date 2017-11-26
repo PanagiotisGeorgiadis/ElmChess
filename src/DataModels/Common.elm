@@ -43,6 +43,22 @@ type TileType
     | RevealedPiece
 
 
+type BoardTileMsg
+    = NoOp
+    | RevealPawnMovement Int
+    | MovePawn Position
+    | RevealKnightMovement Int
+    | MoveKnight Position
+    | RevealBishopMovement Int
+    | MoveBishop Position
+    | RevealRookMovement Int
+    | MoveRook Position
+    | RevealKingMovement Int
+    | MoveKing Position
+    | RevealQueenMovement Int
+    | MoveQueen Position
+
+
 lettersList : List BoardLetter
 lettersList =
     [ A

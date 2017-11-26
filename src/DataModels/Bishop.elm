@@ -3,36 +3,23 @@ module DataModels.Bishop exposing (..)
 import DataModels.Common exposing (..)
 
 
-type alias Model =
-    { type_ : TileType
-    , position : Position
-    , action : Msg
-    , color : PieceColor
-    }
-
-
-type Msg
-    = NoOp
-    | MoveOwnBishop
-
-
-initialWhitePlayerBishopState : List Model
-initialWhitePlayerBishopState =
+initialWhitePlayerState : List (BoardTile BoardTileMsg)
+initialWhitePlayerState =
     [ { position = { x = 7, y = C }
       , type_ = BishopPiece
-      , action = MoveOwnBishop
+      , action = RevealBishopMovement (getIndexFromPosition { x = 7, y = C })
       , color = White
       }
     , { position = { x = 7, y = F }
       , type_ = BishopPiece
-      , action = MoveOwnBishop
+      , action = RevealBishopMovement (getIndexFromPosition { x = 7, y = F })
       , color = White
       }
     ]
 
 
-initialBlackPlayerBishopState : List Model
-initialBlackPlayerBishopState =
+initialBlackPlayerState : List (BoardTile BoardTileMsg)
+initialBlackPlayerState =
     [ { position = { x = 0, y = C }
       , type_ = BishopPiece
       , action = NoOp
@@ -44,17 +31,3 @@ initialBlackPlayerBishopState =
       , color = Black
       }
     ]
-
-
-getStateFromIndex : Int -> List Model -> Maybe Model
-getStateFromIndex index bishops =
-    List.head <|
-        List.foldl
-            (\bishop result ->
-                if getIndexFromPosition bishop.position == index then
-                    bishop :: result
-                else
-                    result
-            )
-            []
-            bishops

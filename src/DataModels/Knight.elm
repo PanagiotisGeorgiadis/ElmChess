@@ -3,36 +3,23 @@ module DataModels.Knight exposing (..)
 import DataModels.Common exposing (..)
 
 
-type alias Model =
-    { type_ : TileType
-    , position : Position
-    , action : Msg
-    , color : PieceColor
-    }
-
-
-type Msg
-    = NoOp
-    | MoveOwnKnight
-
-
-initialWhitePlayerKnightState : List Model
-initialWhitePlayerKnightState =
+initialWhitePlayerState : List (BoardTile BoardTileMsg)
+initialWhitePlayerState =
     [ { position = { x = 7, y = B }
       , type_ = KnightPiece
-      , action = MoveOwnKnight
+      , action = RevealKnightMovement (getIndexFromPosition { x = 7, y = B })
       , color = White
       }
     , { position = { x = 7, y = G }
       , type_ = KnightPiece
-      , action = MoveOwnKnight
+      , action = RevealKnightMovement (getIndexFromPosition { x = 7, y = G })
       , color = White
       }
     ]
 
 
-initialBlackPlayerKnightState : List Model
-initialBlackPlayerKnightState =
+initialBlackPlayerState : List (BoardTile BoardTileMsg)
+initialBlackPlayerState =
     [ { position = { x = 0, y = B }
       , type_ = KnightPiece
       , action = NoOp
@@ -44,17 +31,3 @@ initialBlackPlayerKnightState =
       , color = Black
       }
     ]
-
-
-getStateFromIndex : Int -> List Model -> Maybe Model
-getStateFromIndex index knights =
-    List.head <|
-        List.foldl
-            (\knight result ->
-                if getIndexFromPosition knight.position == index then
-                    knight :: result
-                else
-                    result
-            )
-            []
-            knights

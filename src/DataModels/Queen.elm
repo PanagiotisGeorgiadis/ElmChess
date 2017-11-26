@@ -3,48 +3,21 @@ module DataModels.Queen exposing (..)
 import DataModels.Common exposing (..)
 
 
-type alias Model =
-    { type_ : TileType
-    , position : Position
-    , action : Msg
-    , color : PieceColor
-    }
-
-
-type Msg
-    = NoOp
-    | MoveOwnQueen
-
-
-initialWhitePlayerQueenState : List Model
-initialWhitePlayerQueenState =
+initialWhitePlayerState : List (BoardTile BoardTileMsg)
+initialWhitePlayerState =
     [ { position = { x = 7, y = D }
       , type_ = QueenPiece
-      , action = MoveOwnQueen
+      , action = RevealQueenMovement (getIndexFromPosition { x = 7, y = D })
       , color = White
       }
     ]
 
 
-initialBlackPlayerQueenState : List Model
-initialBlackPlayerQueenState =
+initialBlackPlayerState : List (BoardTile BoardTileMsg)
+initialBlackPlayerState =
     [ { position = { x = 0, y = D }
       , type_ = QueenPiece
       , action = NoOp
       , color = Black
       }
     ]
-
-
-getStateFromIndex : Int -> List Model -> Maybe Model
-getStateFromIndex index queens =
-    List.head <|
-        List.foldl
-            (\queen result ->
-                if getIndexFromPosition queen.position == index then
-                    queen :: result
-                else
-                    result
-            )
-            []
-            queens

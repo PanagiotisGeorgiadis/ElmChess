@@ -44,7 +44,7 @@ boardContentsView { boardTiles } =
     List.indexedMap boardTileHtml boardTiles
 
 
-boardTileHtml : Int -> BoardTile Msg -> Html Msg
+boardTileHtml : Int -> BoardTile BoardTileMsg -> Html Msg
 boardTileHtml index boardTile =
     let
         rowClassList =
@@ -86,5 +86,6 @@ boardTileHtml index boardTile =
         tileClassList =
             rowClassList ++ pieceClassList ++ colorClassList ++ revealedClassList
     in
-    div [ classList tileClassList, onClick boardTile.action ]
-        [ text <| toString <| index + 1 ]
+    Html.map BoardTileMsg <|
+        div [ classList tileClassList, onClick boardTile.action ]
+            [ text <| toString <| index + 1 ]
