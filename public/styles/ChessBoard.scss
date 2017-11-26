@@ -116,6 +116,13 @@
                 }
             }
 
+            &.threatened {
+                -webkit-box-shadow: inset 0px 0px 30px 1px rgba(56, 224, 56, 1);
+                -moz-box-shadow: inset 0px 0px 30px 1px rgba(56, 224, 56, 1);
+                -o-box-shadow: inset 0px 0px 30px 1px rgba(56, 224, 56, 1);
+                box-shadow: inset 0px 0px 30px 1px rgba(56, 224, 56, 1);
+            }
+
             /* Might use this implementation istead of the dot.
             &.available {
                 box-shadow: inset 0px 0px 10px 7px rgba(0,0,0,0.35)

@@ -29,6 +29,7 @@ type alias BoardTile msg =
     , position : Position
     , action : msg
     , color : PieceColor
+    , isThreatened : Bool
     }
 
 

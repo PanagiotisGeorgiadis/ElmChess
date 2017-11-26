@@ -16,6 +16,7 @@ getEmptyTileState index =
     , position = getPositionFromIndex index
     , action = NoOp
     , color = NoColor
+    , isThreatened = False
     }
 
 

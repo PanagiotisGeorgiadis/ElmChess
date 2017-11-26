@@ -9,6 +9,7 @@ initialWhitePlayerState =
       , type_ = QueenPiece
       , action = RevealQueenMovement (getIndexFromPosition { x = 7, y = D })
       , color = White
+      , isThreatened = False
       }
     ]
 
@@ -19,5 +20,6 @@ initialBlackPlayerState =
       , type_ = QueenPiece
       , action = NoOp
       , color = Black
+      , isThreatened = False
       }
     ]

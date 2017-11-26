@@ -9,11 +9,13 @@ initialWhitePlayerState =
       , type_ = BishopPiece
       , action = RevealBishopMovement (getIndexFromPosition { x = 7, y = C })
       , color = White
+      , isThreatened = False
       }
     , { position = { x = 7, y = F }
       , type_ = BishopPiece
       , action = RevealBishopMovement (getIndexFromPosition { x = 7, y = F })
       , color = White
+      , isThreatened = False
       }
     ]
 
@@ -24,10 +26,12 @@ initialBlackPlayerState =
       , type_ = BishopPiece
       , action = NoOp
       , color = Black
+      , isThreatened = False
       }
     , { position = { x = 0, y = F }
       , type_ = BishopPiece
       , action = NoOp
       , color = Black
+      , isThreatened = False
       }
     ]

@@ -83,8 +83,14 @@ boardTileHtml index boardTile =
             else
                 []
 
+        threatenedClassList =
+            if boardTile.isThreatened then
+                [ ( "threatened", True ) ]
+            else
+                []
+
         tileClassList =
-            rowClassList ++ pieceClassList ++ colorClassList ++ revealedClassList
+            rowClassList ++ pieceClassList ++ colorClassList ++ revealedClassList ++ threatenedClassList
     in
     Html.map BoardTileMsg <|
         div [ classList tileClassList, onClick boardTile.action ]

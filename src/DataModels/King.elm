@@ -9,6 +9,7 @@ initialWhitePlayerState =
       , type_ = KingPiece
       , action = RevealKingMovement (getIndexFromPosition { x = 7, y = E })
       , color = White
+      , isThreatened = False
       }
     ]
 
@@ -19,5 +20,6 @@ initialBlackPlayerState =
       , type_ = KingPiece
       , action = NoOp
       , color = Black
+      , isThreatened = False
       }
     ]

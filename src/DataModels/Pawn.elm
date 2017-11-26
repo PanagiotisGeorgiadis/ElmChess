@@ -30,6 +30,7 @@ initialWhitePlayerState =
             , type_ = PawnPiece
             , action = RevealPawnMovement (getIndexFromPosition { x = 6, y = letter })
             , color = White
+            , isThreatened = False
             }
                 :: result
         )
@@ -45,6 +46,7 @@ initialBlackPlayerState =
             , type_ = PawnPiece
             , action = NoOp
             , color = Black
+            , isThreatened = False
             }
                 :: result
         )
