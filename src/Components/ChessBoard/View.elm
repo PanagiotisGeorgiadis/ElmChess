@@ -1,7 +1,5 @@
 module Components.ChessBoard.View exposing (..)
 
--- import Components.ChessBoard.Model exposing (..)
-
 import Components.ChessBoard.Update exposing (..)
 import DataModels.Common exposing (..)
 import Html exposing (Html, div, text)
@@ -78,5 +76,15 @@ boardTileHtml index boardTile =
                 [ ( "piece king", True ) ]
             else
                 []
+
+        revealedClassList =
+            if boardTile.type_ == RevealedPiece then
+                [ ( "revealed", True ) ]
+            else
+                []
+
+        tileClassList =
+            rowClassList ++ pieceClassList ++ colorClassList ++ revealedClassList
     in
-    div [ classList (rowClassList ++ pieceClassList ++ colorClassList), onClick boardTile.action ] [ text <| toString <| index + 1 ]
+    div [ classList tileClassList, onClick boardTile.action ]
+        [ text <| toString <| index + 1 ]

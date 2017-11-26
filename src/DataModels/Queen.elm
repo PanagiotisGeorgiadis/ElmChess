@@ -16,27 +16,35 @@ type Msg
     | MoveOwnQueen
 
 
-initialWhitePlayerQueenState : Model
+initialWhitePlayerQueenState : List Model
 initialWhitePlayerQueenState =
-    { position = { x = 7, y = D }
-    , type_ = QueenPiece
-    , action = MoveOwnQueen
-    , color = White
-    }
+    [ { position = { x = 7, y = D }
+      , type_ = QueenPiece
+      , action = MoveOwnQueen
+      , color = White
+      }
+    ]
 
 
-initialBlackPlayerQueenState : Model
+initialBlackPlayerQueenState : List Model
 initialBlackPlayerQueenState =
-    { position = { x = 0, y = D }
-    , type_ = QueenPiece
-    , action = NoOp
-    , color = Black
-    }
+    [ { position = { x = 0, y = D }
+      , type_ = QueenPiece
+      , action = NoOp
+      , color = Black
+      }
+    ]
 
 
-getStateFromIndex : Int -> Model -> Maybe Model
-getStateFromIndex index queen =
-    if getIndexFromPosition queen.position == index then
-        Just queen
-    else
-        Nothing
+getStateFromIndex : Int -> List Model -> Maybe Model
+getStateFromIndex index queens =
+    List.head <|
+        List.foldl
+            (\queen result ->
+                if getIndexFromPosition queen.position == index then
+                    queen :: result
+                else
+                    result
+            )
+            []
+            queens

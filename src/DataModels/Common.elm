@@ -142,76 +142,11 @@ getIndexFromPosition position =
 
 getPositionFromIndex : Int -> Position
 getPositionFromIndex index =
-    { x = index // 8
-    , y = getLetterFromNumber (index % 8)
-    }
-
-
-getPrecedingBoardTilesFromPosition : List (BoardTile msg) -> Position -> List (BoardTile msg)
-getPrecedingBoardTilesFromPosition boardTiles position =
-    let
-        index =
-            getIndexFromPosition position
-
-        precedingBoardTiles =
-            List.take index boardTiles
-
-        _ =
-            Debug.log "precedingLength" <| List.length precedingBoardTiles
-
-        _ =
-            Debug.log "head" <| List.head precedingBoardTiles
-    in
-    precedingBoardTiles
-
-
-getFollowingBoardTilesFromPosition : List (BoardTile msg) -> Position -> List (BoardTile msg)
-getFollowingBoardTilesFromPosition boardTiles position =
-    let
-        index =
-            getIndexFromPosition position
-
-        followingBoardTiles =
-            List.drop index boardTiles
-
-        _ =
-            Debug.log "followingLength" <| List.length followingBoardTiles
-
-        _ =
-            Debug.log "head" <| List.head followingBoardTiles
-    in
-    followingBoardTiles
-
-
-getPrecedingBoardTilesFromIndex : List (BoardTile msg) -> Int -> List (BoardTile msg)
-getPrecedingBoardTilesFromIndex boardTiles index =
-    let
-        _ =
-            Debug.log "" ""
-    in
-    boardTiles
-
-
-revealBoardTile : List (BoardTile msg) -> Position -> msg -> List (BoardTile msg)
-revealBoardTile boardTiles position action =
-    let
-        precedingBoardTiles =
-            getPrecedingBoardTilesFromPosition boardTiles position
-
-        followingBoardTilesFromPosition =
-            getFollowingBoardTilesFromPosition boardTiles position
-
-        -- updatedBoardTiles =
-        -- precedingBoardTiles
-    in
-    boardTiles
-
-
-
--- updateBoardTile : BoardTile msg -> Position -> BoardTile msg
--- updateBoardTile boardTile position action type_ =
---     let
---         _ =
---             Debug.log "boardTile" boardTile
---     in
---     boardTile
+    if index % 8 == 0 then
+        { x = (index // 8) - 1
+        , y = H
+        }
+    else
+        { x = index // 8
+        , y = getLetterFromNumber (index % 8)
+        }

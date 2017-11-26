@@ -103,6 +103,7 @@
             }
 
             &.revealed {
+                cursor: pointer;
                 &:after {
                     content: '';
                     width: 20px;

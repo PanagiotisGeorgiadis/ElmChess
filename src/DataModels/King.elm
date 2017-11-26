@@ -16,27 +16,35 @@ type Msg
     | MoveOwnKing
 
 
-initialWhitePlayerKingState : Model
+initialWhitePlayerKingState : List Model
 initialWhitePlayerKingState =
-    { position = { x = 7, y = E }
-    , type_ = KingPiece
-    , action = MoveOwnKing
-    , color = White
-    }
+    [ { position = { x = 7, y = E }
+      , type_ = KingPiece
+      , action = MoveOwnKing
+      , color = White
+      }
+    ]
 
 
-initialBlackPlayerKingState : Model
+initialBlackPlayerKingState : List Model
 initialBlackPlayerKingState =
-    { position = { x = 0, y = E }
-    , type_ = KingPiece
-    , action = NoOp
-    , color = Black
-    }
+    [ { position = { x = 0, y = E }
+      , type_ = KingPiece
+      , action = NoOp
+      , color = Black
+      }
+    ]
 
 
-getStateFromIndex : Int -> Model -> Maybe Model
-getStateFromIndex index king =
-    if getIndexFromPosition king.position == index then
-        Just king
-    else
-        Nothing
+getStateFromIndex : Int -> List Model -> Maybe Model
+getStateFromIndex index kings =
+    List.head <|
+        List.foldl
+            (\king result ->
+                if getIndexFromPosition king.position == index then
+                    king :: result
+                else
+                    result
+            )
+            []
+            kings
