@@ -35,7 +35,8 @@ update msg model =
                                 (\bt ->
                                     let
                                         boardTile =
-                                            resetBoardTileType bt
+                                            resetBoardTileThreatenedState <|
+                                                resetBoardTileType bt
                                     in
                                     List.foldl
                                         (\instruction tile ->
@@ -49,10 +50,15 @@ update msg model =
                                             if instructionIndex == tileIndex then
                                                 case tile.type_ of
                                                     EmptyPiece ->
-                                                        BoardTile RevealedPiece tile.position (MovePawn tile.position) tile.color
+                                                        BoardTile RevealedPiece tile.position (MovePawn tile.position) tile.color False
+
+                                                    RevealedPiece ->
+                                                        tile
 
                                                     _ ->
-                                                        tile
+                                                        { tile
+                                                            | isThreatened = True
+                                                        }
                                             else
                                                 tile
                                         )
@@ -68,7 +74,7 @@ update msg model =
                     , Cmd.none
                     )
 
-                MovePawn position ->
+                MovePawn targetPosition ->
                     let
                         updatedBoardTiles =
                             case model.selectedPiece of
@@ -83,12 +89,12 @@ update msg model =
                                                     getIndexFromPosition selectedPiece.position
 
                                                 targetTileIndex =
-                                                    getIndexFromPosition position
+                                                    getIndexFromPosition targetPosition
                                             in
                                             if boardTileIndex == selectedPieceIndex then
-                                                BoardTile EmptyPiece boardTile.position NoOp NoColor
+                                                BoardTile EmptyPiece boardTile.position NoOp NoColor False
                                             else if boardTileIndex == targetTileIndex then
-                                                BoardTile PawnPiece boardTile.position (RevealPawnMovement boardTileIndex) boardTile.color
+                                                BoardTile PawnPiece boardTile.position (RevealPawnMovement boardTileIndex) boardTile.color False
                                             else
                                                 resetBoardTileType boardTile
                                         )
@@ -118,6 +124,13 @@ getTileFromIndex index boardTiles =
 resetBoardTileType : BoardTile BoardTileMsg -> BoardTile BoardTileMsg
 resetBoardTileType tile =
     if tile.type_ == RevealedPiece then
-        { tile | type_ = EmptyPiece }
+        { tile | type_ = EmptyPiece, action = NoOp }
     else
         tile
+
+
+resetBoardTileThreatenedState : BoardTile BoardTileMsg -> BoardTile BoardTileMsg
+resetBoardTileThreatenedState tile =
+    { tile
+        | isThreatened = False
+    }
