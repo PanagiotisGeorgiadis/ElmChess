@@ -3,23 +3,60 @@ module DataModels.Pawn exposing (..)
 import DataModels.Common exposing (..)
 
 
-getMovementInstructions : Position -> List Position
+getMovementInstructions : Position -> List MovementInstructions
 getMovementInstructions position =
     case ( position.x, position.y ) of
         ( 6, _ ) ->
-            [ Position (position.x - 1) position.y
-            , Position (position.x - 2) position.y
+            [ { position = Position (position.x - 1) position.y
+              , isCapturableMove = False
+              }
+            , { position = Position (position.x - 2) position.y
+              , isCapturableMove = False
+              }
             ]
+                ++ getCapturableMovementInstructions position
 
         _ ->
             if position.x > 1 then
-                [ Position (position.x - 1) position.y ]
+                [ { position = Position (position.x - 1) position.y
+                  , isCapturableMove = False
+                  }
+                ]
+                    ++ getCapturableMovementInstructions position
             else
                 let
                     _ =
                         Debug.log "This needs fix" ""
                 in
                 []
+
+
+getCapturableMovementInstructions : Position -> List MovementInstructions
+getCapturableMovementInstructions position =
+    case ( incrementBoardLetter position.y, decrementBoardLetter position.y ) of
+        ( Just a, Just b ) ->
+            [ { position = Position (position.x - 1) a
+              , isCapturableMove = True
+              }
+            , { position = Position (position.x - 1) b
+              , isCapturableMove = True
+              }
+            ]
+
+        ( Just a, Nothing ) ->
+            [ { position = Position (position.x - 1) a
+              , isCapturableMove = True
+              }
+            ]
+
+        ( Nothing, Just b ) ->
+            [ { position = Position (position.x - 1) b
+              , isCapturableMove = True
+              }
+            ]
+
+        ( Nothing, Nothing ) ->
+            []
 
 
 initialWhitePlayerState : List (BoardTile BoardTileMsg)

@@ -3,6 +3,7 @@ module Main exposing (..)
 import Components.ChessBoard.Model as ChessBoard
 import Components.ChessBoard.Update as ChessBoard
 import Components.ChessBoard.View as ChessBoard
+import DataModels.Common exposing (PlayerType(..))
 import Html exposing (Html, div, img, text)
 import Html.Attributes exposing (class)
 
@@ -17,15 +18,10 @@ type alias Model =
     }
 
 
-type PlayerType
-    = White
-    | Black
-
-
 init : ( Model, Cmd Msg )
 init =
     ( { players = 0
-      , playerType = White
+      , playerType = WhitePlayer
       , chessBoard = ChessBoard.initialModel
       }
     , Cmd.none
@@ -47,9 +43,11 @@ update msg model =
         ChessBoardMsg submsg ->
             let
                 ( updatedModel, subcmd ) =
-                    ChessBoard.update submsg model.chessBoard
+                    ChessBoard.update submsg model.chessBoard model.playerType
             in
-            ( { model | chessBoard = updatedModel }
+            ( { model
+                | chessBoard = updatedModel
+              }
             , Cmd.none
             )
 

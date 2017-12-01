@@ -1,9 +1,20 @@
 module DataModels.Common exposing (..)
 
 
+type PlayerType
+    = WhitePlayer
+    | BlackPlayer
+
+
 type alias Position =
     { x : Int
     , y : BoardLetter
+    }
+
+
+type alias MovementInstructions =
+    { position : Position
+    , isCapturableMove : Bool
     }
 
 
@@ -167,3 +178,43 @@ getPositionFromIndex index =
         { x = index // 8
         , y = getLetterFromNumber (index % 8)
         }
+
+
+incrementBoardLetter : BoardLetter -> Maybe BoardLetter
+incrementBoardLetter letter =
+    if letter == A then
+        Just B
+    else if letter == B then
+        Just C
+    else if letter == C then
+        Just D
+    else if letter == D then
+        Just E
+    else if letter == E then
+        Just F
+    else if letter == F then
+        Just G
+    else if letter == G then
+        Just H
+    else
+        Nothing
+
+
+decrementBoardLetter : BoardLetter -> Maybe BoardLetter
+decrementBoardLetter letter =
+    if letter == A then
+        Nothing
+    else if letter == B then
+        Just A
+    else if letter == C then
+        Just B
+    else if letter == D then
+        Just C
+    else if letter == E then
+        Just D
+    else if letter == F then
+        Just E
+    else if letter == G then
+        Just F
+    else
+        Just G

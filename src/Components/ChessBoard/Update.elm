@@ -1,12 +1,15 @@
 module Components.ChessBoard.Update exposing (..)
 
-import DataModels.Bishop as Bishop
+-- import DataModels.Bishop as Bishop
+-- import DataModels.King as King
+-- import DataModels.Knight as Knight
+
 import DataModels.Common exposing (..)
-import DataModels.King as King
-import DataModels.Knight as Knight
 import DataModels.Pawn as Pawn
-import DataModels.Queen as Queen
-import DataModels.Rook as Rook
+
+
+-- import DataModels.Queen as Queen
+-- import DataModels.Rook as Rook
 
 
 type alias Model =
@@ -19,8 +22,8 @@ type Msg
     = BoardTileMsg BoardTileMsg
 
 
-update : Msg -> Model -> ( Model, Cmd Msg )
-update msg model =
+update : Msg -> Model -> PlayerType -> ( Model, Cmd Msg )
+update msg model playerType =
     case msg of
         BoardTileMsg submsg ->
             case submsg of
@@ -42,7 +45,7 @@ update msg model =
                                         (\instruction tile ->
                                             let
                                                 instructionIndex =
-                                                    getIndexFromPosition instruction
+                                                    getIndexFromPosition instruction.position
 
                                                 tileIndex =
                                                     getIndexFromPosition tile.position
@@ -50,14 +53,30 @@ update msg model =
                                             if instructionIndex == tileIndex then
                                                 case tile.type_ of
                                                     EmptyPiece ->
-                                                        BoardTile RevealedPiece tile.position (MovePawn tile.position) tile.color False
+                                                        if instruction.isCapturableMove then
+                                                            tile
+                                                        else
+                                                            BoardTile RevealedPiece tile.position (MovePawn tile.position) tile.color False
 
                                                     RevealedPiece ->
                                                         tile
 
                                                     _ ->
+                                                        let
+                                                            ( isThreatened, action ) =
+                                                                case ( playerType, tile.color, instruction.isCapturableMove ) of
+                                                                    ( WhitePlayer, Black, True ) ->
+                                                                        ( True, MovePawn tile.position )
+
+                                                                    ( BlackPlayer, White, True ) ->
+                                                                        ( True, MovePawn tile.position )
+
+                                                                    _ ->
+                                                                        ( False, tile.action )
+                                                        in
                                                         { tile
-                                                            | isThreatened = True
+                                                            | isThreatened = isThreatened
+                                                            , action = action
                                                         }
                                             else
                                                 tile
