@@ -3,8 +3,8 @@ module DataModels.Knight exposing (..)
 import DataModels.Common exposing (..)
 
 
-initialWhitePlayerState : List (BoardTile BoardTileMsg)
-initialWhitePlayerState =
+initialWhitePiecesState : List (BoardTile BoardTileMsg)
+initialWhitePiecesState =
     [ { position = { x = 7, y = B }
       , type_ = KnightPiece
       , action = RevealKnightMovement (getIndexFromPosition { x = 7, y = B })
@@ -20,8 +20,8 @@ initialWhitePlayerState =
     ]
 
 
-initialBlackPlayerState : List (BoardTile BoardTileMsg)
-initialBlackPlayerState =
+initialBlackPiecesState : List (BoardTile BoardTileMsg)
+initialBlackPiecesState =
     [ { position = { x = 0, y = B }
       , type_ = KnightPiece
       , action = NoOp

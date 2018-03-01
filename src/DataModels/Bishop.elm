@@ -3,8 +3,8 @@ module DataModels.Bishop exposing (..)
 import DataModels.Common exposing (..)
 
 
-initialWhitePlayerState : List (BoardTile BoardTileMsg)
-initialWhitePlayerState =
+initialWhitePiecesState : List (BoardTile BoardTileMsg)
+initialWhitePiecesState =
     [ { position = { x = 7, y = C }
       , type_ = BishopPiece
       , action = RevealBishopMovement (getIndexFromPosition { x = 7, y = C })
@@ -20,8 +20,8 @@ initialWhitePlayerState =
     ]
 
 
-initialBlackPlayerState : List (BoardTile BoardTileMsg)
-initialBlackPlayerState =
+initialBlackPiecesState : List (BoardTile BoardTileMsg)
+initialBlackPiecesState =
     [ { position = { x = 0, y = C }
       , type_ = BishopPiece
       , action = NoOp

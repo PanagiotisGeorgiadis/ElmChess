@@ -3,8 +3,8 @@ module DataModels.Rook exposing (..)
 import DataModels.Common exposing (..)
 
 
-initialWhitePlayerState : List (BoardTile BoardTileMsg)
-initialWhitePlayerState =
+initialWhitePiecesState : List (BoardTile BoardTileMsg)
+initialWhitePiecesState =
     [ { position = { x = 7, y = A }
       , type_ = RookPiece
       , action = RevealRookMovement (getIndexFromPosition { x = 7, y = A })
@@ -20,8 +20,8 @@ initialWhitePlayerState =
     ]
 
 
-initialBlackPlayerState : List (BoardTile BoardTileMsg)
-initialBlackPlayerState =
+initialBlackPiecesState : List (BoardTile BoardTileMsg)
+initialBlackPiecesState =
     [ { position = { x = 0, y = A }
       , type_ = RookPiece
       , action = NoOp

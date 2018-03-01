@@ -51,11 +51,6 @@ update msg model =
             , Cmd.none
             )
 
-        -- ( { model
-        --     | chessBoard = updatedModel
-        --   }
-        -- , Cmd.none
-        -- )
         NoOp ->
             ( model, Cmd.none )
 

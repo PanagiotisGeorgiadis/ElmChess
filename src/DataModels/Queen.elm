@@ -3,8 +3,8 @@ module DataModels.Queen exposing (..)
 import DataModels.Common exposing (..)
 
 
-initialWhitePlayerState : List (BoardTile BoardTileMsg)
-initialWhitePlayerState =
+initialWhitePiecesState : List (BoardTile BoardTileMsg)
+initialWhitePiecesState =
     [ { position = { x = 7, y = D }
       , type_ = QueenPiece
       , action = RevealQueenMovement (getIndexFromPosition { x = 7, y = D })
@@ -14,8 +14,8 @@ initialWhitePlayerState =
     ]
 
 
-initialBlackPlayerState : List (BoardTile BoardTileMsg)
-initialBlackPlayerState =
+initialBlackPiecesState : List (BoardTile BoardTileMsg)
+initialBlackPiecesState =
     [ { position = { x = 0, y = D }
       , type_ = QueenPiece
       , action = NoOp

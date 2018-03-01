@@ -24,11 +24,8 @@ getMovementInstructions position =
                 ]
                     ++ getCapturableMovementInstructions position
             else
-                let
-                    _ =
-                        Debug.log "This needs fix" ""
-                in
                 []
+                    ++ getCapturableMovementInstructions position
 
 
 getCapturableMovementInstructions : Position -> List MovementInstructions
@@ -59,8 +56,8 @@ getCapturableMovementInstructions position =
             []
 
 
-initialWhitePlayerState : List (BoardTile BoardTileMsg)
-initialWhitePlayerState =
+initialWhitePiecesState : List (BoardTile BoardTileMsg)
+initialWhitePiecesState =
     List.foldl
         (\letter result ->
             { position = { x = 6, y = letter }
@@ -75,8 +72,8 @@ initialWhitePlayerState =
         lettersList
 
 
-initialBlackPlayerState : List (BoardTile BoardTileMsg)
-initialBlackPlayerState =
+initialBlackPiecesState : List (BoardTile BoardTileMsg)
+initialBlackPiecesState =
     List.foldl
         (\letter result ->
             { position = { x = 1, y = letter }

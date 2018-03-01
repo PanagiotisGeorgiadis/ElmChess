@@ -71,20 +71,20 @@ getInitialTileState index =
 
 getInitialWhitePlayerState : List (BoardTile BoardTileMsg)
 getInitialWhitePlayerState =
-    List.append Pawn.initialWhitePlayerState <|
-        List.append Bishop.initialWhitePlayerState <|
-            List.append Knight.initialWhitePlayerState <|
-                List.append Rook.initialWhitePlayerState <|
-                    List.append Queen.initialWhitePlayerState King.initialWhitePlayerState
+    List.append Pawn.initialWhitePiecesState <|
+        List.append Bishop.initialWhitePiecesState <|
+            List.append Knight.initialWhitePiecesState <|
+                List.append Rook.initialWhitePiecesState <|
+                    List.append Queen.initialWhitePiecesState King.initialWhitePiecesState
 
 
 getInitialBlackPlayerState : List (BoardTile BoardTileMsg)
 getInitialBlackPlayerState =
-    List.append Pawn.initialBlackPlayerState <|
-        List.append Bishop.initialBlackPlayerState <|
-            List.append Knight.initialBlackPlayerState <|
-                List.append Rook.initialBlackPlayerState <|
-                    List.append Queen.initialBlackPlayerState King.initialBlackPlayerState
+    List.append Pawn.initialBlackPiecesState <|
+        List.append Bishop.initialBlackPiecesState <|
+            List.append Knight.initialBlackPiecesState <|
+                List.append Rook.initialBlackPiecesState <|
+                    List.append Queen.initialBlackPiecesState King.initialBlackPiecesState
 
 
 getPieceStateFromIndex : List (BoardTile BoardTileMsg) -> Int -> BoardTile BoardTileMsg

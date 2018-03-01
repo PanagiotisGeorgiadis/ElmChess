@@ -38,8 +38,9 @@ update msg model playerType =
                                 (\bt ->
                                     let
                                         boardTile =
-                                            resetBoardTileThreatenedState <|
-                                                resetBoardTileType bt
+                                            resetBoardTileAction <|
+                                                resetBoardTileThreatenedState <|
+                                                    resetBoardTileType bt
                                     in
                                     List.foldl
                                         (\instruction tile ->
@@ -113,9 +114,10 @@ update msg model playerType =
                                             if boardTileIndex == selectedPieceIndex then
                                                 BoardTile EmptyPiece boardTile.position NoOp NoColor False
                                             else if boardTileIndex == targetTileIndex then
-                                                BoardTile PawnPiece boardTile.position (RevealPawnMovement boardTileIndex) boardTile.color False
+                                                BoardTile PawnPiece boardTile.position (RevealPawnMovement boardTileIndex) selectedPiece.color False
                                             else
-                                                resetBoardTileType boardTile
+                                                resetBoardTileThreatenedState <|
+                                                    resetBoardTileType boardTile
                                         )
                                         model.boardTiles
 
@@ -150,6 +152,14 @@ resetBoardTileType tile =
 
 resetBoardTileThreatenedState : BoardTile BoardTileMsg -> BoardTile BoardTileMsg
 resetBoardTileThreatenedState tile =
-    { tile
-        | isThreatened = False
-    }
+    { tile | isThreatened = False }
+
+
+resetBoardTileAction : BoardTile BoardTileMsg -> BoardTile BoardTileMsg
+resetBoardTileAction tile =
+    case tile.action of
+        MovePawn _ ->
+            { tile | action = NoOp }
+
+        _ ->
+            tile
