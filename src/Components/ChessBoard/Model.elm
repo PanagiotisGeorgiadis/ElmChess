@@ -17,6 +17,7 @@ getEmptyTileState index =
     , action = NoOp
     , color = NoColor
     , isThreatened = False
+    , index = index
     }
 
 
@@ -29,11 +30,14 @@ initialModel =
 
 isPieceOnTile : List (BoardTile BoardTileMsg) -> Int -> Bool
 isPieceOnTile boardTiles index =
-    List.any
-        (\boardTile ->
-            getIndexFromPosition boardTile.position == index
-        )
-        boardTiles
+    List.any ((==) index << .index) boardTiles
+
+
+
+-- (\boardTile ->
+--     getIndexFromPosition boardTile.position == index
+-- )
+-- boardTiles
 
 
 getInitialBoardState : List (BoardTile BoardTileMsg)
@@ -91,7 +95,8 @@ getPieceStateFromIndex : List (BoardTile BoardTileMsg) -> Int -> BoardTile Board
 getPieceStateFromIndex boardTiles index =
     List.foldl
         (\piece emptyPiece ->
-            if getIndexFromPosition piece.position == index then
+            -- if getIndexFromPosition piece.position == index then
+            if piece.index == index then
                 piece
             else
                 emptyPiece

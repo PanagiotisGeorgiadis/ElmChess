@@ -62,9 +62,12 @@ initialWhitePiecesState =
         (\letter result ->
             { position = { x = 6, y = letter }
             , type_ = PawnPiece
-            , action = RevealPawnMovement (getIndexFromPosition { x = 6, y = letter })
+
+            -- , action = RevealPawnMovement (getIndexFromPosition { x = 6, y = letter })
+            , action = RevealPawnMovement (49 + List.length result)
             , color = White
             , isThreatened = False
+            , index = 49 + List.length result
             }
                 :: result
         )
@@ -81,6 +84,7 @@ initialBlackPiecesState =
             , action = NoOp
             , color = Black
             , isThreatened = False
+            , index = 9 + List.length result
             }
                 :: result
         )

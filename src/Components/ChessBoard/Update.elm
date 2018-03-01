@@ -49,7 +49,8 @@ update msg model playerType =
                                                     getIndexFromPosition instruction.position
 
                                                 tileIndex =
-                                                    getIndexFromPosition tile.position
+                                                    -- getIndexFromPosition tile.position
+                                                    tile.index
                                             in
                                             if instructionIndex == tileIndex then
                                                 case tile.type_ of
@@ -57,7 +58,7 @@ update msg model playerType =
                                                         if instruction.isCapturableMove then
                                                             tile
                                                         else
-                                                            BoardTile RevealedPiece tile.position (MovePawn tile.position) tile.color False
+                                                            BoardTile RevealedPiece tile.position (MovePawn tile.position) tile.color False tile.index
 
                                                     RevealedPiece ->
                                                         tile
@@ -103,18 +104,23 @@ update msg model playerType =
                                         (\boardTile ->
                                             let
                                                 boardTileIndex =
-                                                    getIndexFromPosition boardTile.position
+                                                    -- getIndexFromPosition boardTile.position
+                                                    boardTile.index
+
+                                                _ =
+                                                    Debug.log "boardTileIndex" boardTileIndex
 
                                                 selectedPieceIndex =
-                                                    getIndexFromPosition selectedPiece.position
+                                                    -- getIndexFromPosition selectedPiece.position
+                                                    selectedPiece.index
 
                                                 targetTileIndex =
                                                     getIndexFromPosition targetPosition
                                             in
                                             if boardTileIndex == selectedPieceIndex then
-                                                BoardTile EmptyPiece boardTile.position NoOp NoColor False
+                                                BoardTile EmptyPiece boardTile.position NoOp NoColor False boardTileIndex
                                             else if boardTileIndex == targetTileIndex then
-                                                BoardTile PawnPiece boardTile.position (RevealPawnMovement boardTileIndex) selectedPiece.color False
+                                                BoardTile PawnPiece boardTile.position (RevealPawnMovement boardTileIndex) selectedPiece.color False boardTileIndex
                                             else
                                                 resetBoardTileThreatenedState <|
                                                     resetBoardTileType boardTile
