@@ -9,7 +9,7 @@ import Html.Events exposing (onClick)
 
 letterItemHtml : BoardLetter -> Html Msg
 letterItemHtml letterText =
-    div [] [ text <| getStringFromBoardLetter letterText ]
+    div [] [ text <| toString letterText ]
 
 
 lettersContainerView : Html Msg
@@ -25,8 +25,9 @@ numberItemHtml numberText =
 
 numbersContainerView : Html Msg
 numbersContainerView =
-    div [ class "numbers-container" ]
-        (List.map numberItemHtml <| List.reverse numbersList)
+    div [ class "numbers-container" ] <|
+        List.map numberItemHtml <|
+            List.reverse rowsIndexList
 
 
 view : Model -> Html Msg
@@ -35,13 +36,8 @@ view model =
         [ lettersContainerView
         , numbersContainerView
         , div [ class "chess-board-inner" ]
-            (boardContentsView model)
+            (List.indexedMap boardTileHtml model.boardTiles)
         ]
-
-
-boardContentsView : Model -> List (Html Msg)
-boardContentsView { boardTiles } =
-    List.indexedMap boardTileHtml boardTiles
 
 
 boardTileHtml : Int -> BoardTile BoardTileMsg -> Html Msg

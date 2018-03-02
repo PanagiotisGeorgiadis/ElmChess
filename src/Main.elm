@@ -1,6 +1,5 @@
 module Main exposing (..)
 
-import Components.ChessBoard.Model as ChessBoard
 import Components.ChessBoard.Update as ChessBoard
 import Components.ChessBoard.View as ChessBoard
 import DataModels.Common exposing (PlayerType(..))

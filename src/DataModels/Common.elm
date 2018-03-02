@@ -85,8 +85,8 @@ lettersList =
     ]
 
 
-numbersList : List Int
-numbersList =
+rowsIndexList : List Int
+rowsIndexList =
     List.range 1 totalRows
 
 
@@ -113,26 +113,6 @@ getLetterFromNumber number =
         G
     else
         H
-
-
-getStringFromBoardLetter : BoardLetter -> String
-getStringFromBoardLetter letter =
-    if letter == A then
-        "A"
-    else if letter == B then
-        "B"
-    else if letter == C then
-        "C"
-    else if letter == D then
-        "D"
-    else if letter == E then
-        "E"
-    else if letter == F then
-        "F"
-    else if letter == G then
-        "G"
-    else
-        "H"
 
 
 getNumberFromBoardLetter : BoardLetter -> Int
