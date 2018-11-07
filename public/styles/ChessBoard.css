@@ -1,0 +1,90 @@
+.board {
+    position: relative;
+}
+
+.chessboard {
+    width: 750px;
+    height: 750px;
+    display: flex;
+    flex-wrap: wrap;
+
+    border-left: 1px solid black;
+    border-top: 1px solid black;
+
+    background-color: white;
+}
+
+
+.chessboard > .tile {
+    width: calc(12.5% - 1px);
+    height: calc(12.5% - 1px);
+    border-right: 1px solid black;
+    border-bottom: 1px solid black;
+}
+
+.chessboard > .tile:nth-child(1),
+.chessboard > .tile:nth-child(3),
+.chessboard > .tile:nth-child(5),
+.chessboard > .tile:nth-child(7),
+.chessboard > .tile:nth-child(10),
+.chessboard > .tile:nth-child(12),
+.chessboard > .tile:nth-child(14),
+.chessboard > .tile:nth-child(16),
+.chessboard > .tile:nth-child(17),
+.chessboard > .tile:nth-child(19),
+.chessboard > .tile:nth-child(21),
+.chessboard > .tile:nth-child(23),
+.chessboard > .tile:nth-child(26),
+.chessboard > .tile:nth-child(28),
+.chessboard > .tile:nth-child(30),
+.chessboard > .tile:nth-child(32),
+.chessboard > .tile:nth-child(33),
+.chessboard > .tile:nth-child(35),
+.chessboard > .tile:nth-child(37),
+.chessboard > .tile:nth-child(39),
+.chessboard > .tile:nth-child(42),
+.chessboard > .tile:nth-child(44),
+.chessboard > .tile:nth-child(46),
+.chessboard > .tile:nth-child(48),
+.chessboard > .tile:nth-child(49),
+.chessboard > .tile:nth-child(51),
+.chessboard > .tile:nth-child(53),
+.chessboard > .tile:nth-child(55),
+.chessboard > .tile:nth-child(58),
+.chessboard > .tile:nth-child(60),
+.chessboard > .tile:nth-child(62),
+.chessboard > .tile:nth-child(64) {
+    background-color: rgba(0, 0, 0, .6);
+}
+
+
+.chessboard-numbers {
+    width: 40px;
+    height: 100%;
+    position: absolute;
+    left: -40px;
+    top: 0;
+    color: black;
+    font-size: 26px;
+}
+
+.chessboard-numbers > div {
+    height: 12.5%;
+    display: flex;
+    align-items: center;
+}
+
+.chessboard-letters {
+    width: 100%;
+    height: 40px;
+    position: absolute;
+    display: flex;
+    align-items: center;
+}
+
+
+.chessboard-letters > div {
+    width: 12.5%;
+    font-size: 26px;
+    text-align: center;
+}

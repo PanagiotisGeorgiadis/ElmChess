@@ -1,5 +1,7 @@
 module Main exposing (..)
 
+-- import DataModels.Common exposing (PlayerType(..))
+
 import Components.ChessBoard.Update as ChessBoard
 import Components.ChessBoard.View as ChessBoard
 import DataModels.Common exposing (PlayerType(..))
@@ -7,28 +9,34 @@ import Html exposing (Html, div, img, text)
 import Html.Attributes exposing (class)
 
 
----- MODEL ----
-
-
-type alias Model =
-    { players : Int
-    , playerType : PlayerType
-    , chessBoard : ChessBoard.Model
+type alias Flags =
+    { playerType : String
     }
 
 
-init : ( Model, Cmd Msg )
-init =
-    ( { players = 0
+type alias Model =
+    -- { players : Int
+    -- , playerType : PlayerType
+    -- , chessBoard : ChessBoard.Model
+    -- }
+    { chessBoard : ChessBoard.Model
+    , playerType : PlayerType
+    }
+
+
+init : Flags -> ( Model, Cmd Msg )
+init flags =
+    -- ( { players = 0
+    --   , playerType = WhitePlayer
+    --   , chessBoard = ChessBoard.initialModel
+    --   }
+    -- , Cmd.none
+    -- )
+    ( { chessBoard = ChessBoard.initialModel { playerType = WhitePlayer }
       , playerType = WhitePlayer
-      , chessBoard = ChessBoard.initialModel
       }
     , Cmd.none
     )
-
-
-
----- UPDATE ----
 
 
 type Msg
@@ -39,41 +47,42 @@ type Msg
 update : Msg -> Model -> ( Model, Cmd Msg )
 update msg model =
     case msg of
-        ChessBoardMsg submsg ->
+        ChessBoardMsg subMsg ->
             let
-                ( updatedModel, subcmd ) =
-                    ChessBoard.update submsg model.chessBoard model.playerType
+                ( updatedModel, subCmd, extMsg ) =
+                    ChessBoard.update model model.chessBoard subMsg
             in
             ( { model
                 | chessBoard = updatedModel
               }
-            , Cmd.none
+            , Cmd.map ChessBoardMsg subCmd
             )
 
         NoOp ->
-            ( model, Cmd.none )
-
-
-
----- VIEW ----
+            ( model
+            , Cmd.none
+            )
 
 
 view : Model -> Html Msg
 view model =
     div [ class "app-container" ]
-        [ Html.map ChessBoardMsg <| ChessBoard.view model.chessBoard
+        -- [ Html.map ChessBoardMsg (ChessBoard.view model.chessBoard)
+        -- ]
+        [ Html.map ChessBoardMsg (ChessBoard.view model model.chessBoard)
         ]
 
 
-
----- PROGRAM ----
-
-
-main : Program Never Model Msg
+main : Program Flags Model Msg
 main =
-    Html.program
+    Html.programWithFlags
         { view = view
         , init = init
         , update = update
-        , subscriptions = always Sub.none
+        , subscriptions = subscriptions
         }
+
+
+subscriptions : Model -> Sub Msg
+subscriptions model =
+    Sub.none
