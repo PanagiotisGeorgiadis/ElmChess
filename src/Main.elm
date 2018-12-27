@@ -1,16 +1,29 @@
 module Main exposing (..)
 
--- import DataModels.Common exposing (PlayerType(..))
-
 import Components.ChessBoard.Update as ChessBoard
 import Components.ChessBoard.View as ChessBoard
-import DataModels.Common exposing (PlayerType(..))
-import Html exposing (Html, div, img, text)
-import Html.Attributes exposing (class)
+import DataModels.Common
+    exposing
+        ( BoardTile(..)
+        , BoardTileAttributes
+        , Color
+        , getChessPieceImageSrc
+        , getPlayerColor
+        )
+import Html
+    exposing
+        ( Html
+        , div
+        , h2
+        , img
+        , text
+        )
+import Html.Attributes exposing (class, src)
+import Utils.Actions exposing (simpleAction)
 
 
 type alias Flags =
-    { playerType : String
+    { playerColor : String
     }
 
 
@@ -20,20 +33,28 @@ type alias Model =
     -- , chessBoard : ChessBoard.Model
     -- }
     { chessBoard : ChessBoard.Model
-    , playerType : PlayerType
+    , playerColor : Color
+    , playerCapturedPieces : List BoardTileAttributes
+    , enemyCapturedPieces : List BoardTileAttributes
     }
 
 
 init : Flags -> ( Model, Cmd Msg )
 init flags =
+    let
+        playerColor =
+            getPlayerColor flags.playerColor
+    in
     -- ( { players = 0
     --   , playerType = WhitePlayer
     --   , chessBoard = ChessBoard.initialModel
     --   }
     -- , Cmd.none
     -- )
-    ( { chessBoard = ChessBoard.initialModel { playerType = WhitePlayer }
-      , playerType = WhitePlayer
+    ( { chessBoard = ChessBoard.initialModel { playerColor = playerColor }
+      , playerColor = playerColor
+      , playerCapturedPieces = []
+      , enemyCapturedPieces = []
       }
     , Cmd.none
     )
@@ -41,6 +62,7 @@ init flags =
 
 type Msg
     = NoOp
+    | AddCapturedPiece (Maybe BoardTileAttributes)
     | ChessBoardMsg ChessBoard.Msg
 
 
@@ -51,11 +73,38 @@ update msg model =
             let
                 ( updatedModel, subCmd, extMsg ) =
                     ChessBoard.update model model.chessBoard subMsg
+
+                capturedPieceAttributes =
+                    case extMsg of
+                        ChessBoard.PieceCaptured (OccupiedTile { attributes }) ->
+                            Just attributes
+
+                        ChessBoard.PieceCaptured _ ->
+                            Nothing
+
+                        ChessBoard.None ->
+                            Nothing
             in
             ( { model
                 | chessBoard = updatedModel
               }
-            , Cmd.map ChessBoardMsg subCmd
+            , Cmd.batch
+                [ Cmd.map ChessBoardMsg subCmd
+                , simpleAction (AddCapturedPiece capturedPieceAttributes)
+                ]
+            )
+
+        AddCapturedPiece boardTileAttributes ->
+            ( { model
+                | playerCapturedPieces =
+                    case boardTileAttributes of
+                        Just attrs ->
+                            List.append model.playerCapturedPieces [ attrs ]
+
+                        Nothing ->
+                            model.playerCapturedPieces
+              }
+            , Cmd.none
             )
 
         NoOp ->
@@ -66,11 +115,46 @@ update msg model =
 
 view : Model -> Html Msg
 view model =
-    div [ class "app-container" ]
-        -- [ Html.map ChessBoardMsg (ChessBoard.view model.chessBoard)
-        -- ]
-        [ Html.map ChessBoardMsg (ChessBoard.view model model.chessBoard)
+    div [ class "app-container no-select" ]
+        [ enemyBoardHtml model
+        , Html.map ChessBoardMsg (ChessBoard.view model model.chessBoard)
+        , playerBoardHtml model
         ]
+
+
+enemyBoardHtml : Model -> Html Msg
+enemyBoardHtml model =
+    div [ class "enemy-board" ]
+        [ h2 [ class "enemy-name" ] [ text "Mr Meeseeks" ]
+        , div [ class "captured-pieces" ]
+            [ div []
+                (List.map capturedPieceHtml model.enemyCapturedPieces)
+            ]
+        ]
+
+
+playerBoardHtml : Model -> Html Msg
+playerBoardHtml model =
+    div [ class "player-board" ]
+        [ h2 [ class "player-name" ] [ text "Panos" ]
+        , div [ class "captured-pieces" ]
+            [ div []
+                (List.map capturedPieceHtml model.playerCapturedPieces)
+            ]
+        ]
+
+
+capturedPieceHtml : BoardTileAttributes -> Html Msg
+capturedPieceHtml boardTile =
+    img [ src (getChessPieceImageSrc boardTile) ] []
+
+
+
+-- { index : Int
+-- , color : Color
+-- , type_ : ChessPieceType
+-- , isToggled : Bool
+-- }
 
 
 main : Program Flags Model Msg

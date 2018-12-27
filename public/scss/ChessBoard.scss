@@ -1,0 +1,146 @@
+.board {
+    position: relative;
+
+    .chessboard {
+        width: 750px;
+        height: 750px;
+        display: flex;
+        flex-wrap: wrap;
+
+        border-left: 1px solid black;
+        border-top: 1px solid black;
+
+        background-color: white;
+
+        .tile {
+            width: calc(12.5% - 1px);
+            height: calc(12.5% - 1px);
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-right: 1px solid black;
+            border-bottom: 1px solid black;
+
+            .occupied {
+                width: 100%;
+                height: 100%;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+
+                &.owned {
+                    cursor: pointer;
+                    &:hover {
+                        background-color: rgba(0, 0, 0, 0.4);
+                    }
+                }
+
+                img {
+                    width: 80%;
+                    height: 80%;
+                }
+            } // End of .occupied
+
+            &.revealed {
+                cursor: pointer;
+                &:after {
+                    content: '';
+                    width: 20px;
+                    height: 20px;
+                    position: absolute;
+                    left: calc(50% - 10px);
+                    top: calc(50% - 10px);
+                    background-color: lightgreen;
+                    border-radius: 50%;
+                }
+            }
+
+            &.threatened {
+                -webkit-box-shadow: inset 0px 0px 30px 1px rgba(56, 224, 56, 1);
+                -moz-box-shadow: inset 0px 0px 30px 1px rgba(56, 224, 56, 1);
+                -o-box-shadow: inset 0px 0px 30px 1px rgba(56, 224, 56, 1);
+                box-shadow: inset 0px 0px 30px 1px rgba(56, 224, 56, 1);
+                cursor: pointer;
+            } // End of .threatened
+
+            &.special {
+                -webkit-box-shadow: inset 0px 0px 30px 1px rgba(219, 140, 30, 1);
+                -moz-box-shadow: inset 0px 0px 30px 1px rgba(219, 140, 30, 1);
+                -o-box-shadow: inset 0px 0px 30px 1px rgba(219, 140, 30, 1);
+                box-shadow: inset 0px 0px 30px 1px rgba(219, 140, 30, 1);
+                cursor: pointer;
+            }
+
+            /* Might use this implementation istead of the dot.
+            &.available {
+                box-shadow: inset 0px 0px 10px 7px rgba(0,0,0,0.35)
+            }*/
+        }
+    }
+
+    .chessboard-numbers {
+        width: 40px;
+        height: 100%;
+        position: absolute;
+        left: -40px;
+        top: 0;
+        font-size: 26px;
+
+        div {
+            height: 12.5%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+    }
+
+    .chessboard-letters {
+        width: 100%;
+        height: 40px;
+        position: absolute;
+        display: flex;
+        align-items: center;
+
+        div {
+           width: 12.5%;
+           font-size: 26px;
+           text-align: center;
+       }
+    }
+
+    .tile:nth-child(2),
+    .tile:nth-child(4),
+    .tile:nth-child(6),
+    .tile:nth-child(8),
+    .tile:nth-child(9),
+    .tile:nth-child(11),
+    .tile:nth-child(13),
+    .tile:nth-child(15),
+    .tile:nth-child(18),
+    .tile:nth-child(20),
+    .tile:nth-child(22),
+    .tile:nth-child(24),
+    .tile:nth-child(25),
+    .tile:nth-child(27),
+    .tile:nth-child(29),
+    .tile:nth-child(31),
+    .tile:nth-child(34),
+    .tile:nth-child(36),
+    .tile:nth-child(38),
+    .tile:nth-child(40),
+    .tile:nth-child(41),
+    .tile:nth-child(43),
+    .tile:nth-child(45),
+    .tile:nth-child(47),
+    .tile:nth-child(50),
+    .tile:nth-child(52),
+    .tile:nth-child(54),
+    .tile:nth-child(56),
+    .tile:nth-child(57),
+    .tile:nth-child(59),
+    .tile:nth-child(61),
+    .tile:nth-child(63) {
+        background-color: rgba(0, 0, 0, .6);
+    }
+}

@@ -1,0 +1,150 @@
+.board {
+  position: relative; }
+  .board .chessboard {
+    width: 750px;
+    height: 750px;
+    display: flex;
+    flex-wrap: wrap;
+    border-left: 1px solid black;
+    border-top: 1px solid black;
+    background-color: white; }
+    .board .chessboard .tile {
+      width: calc(12.5% - 1px);
+      height: calc(12.5% - 1px);
+      position: relative;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-right: 1px solid black;
+      border-bottom: 1px solid black;
+      /* Might use this implementation istead of the dot.
+            &.available {
+                box-shadow: inset 0px 0px 10px 7px rgba(0,0,0,0.35)
+            }*/ }
+      .board .chessboard .tile .occupied {
+        width: 100%;
+        height: 100%;
+        display: flex;
+        align-items: center;
+        justify-content: center; }
+        .board .chessboard .tile .occupied.owned {
+          cursor: pointer; }
+          .board .chessboard .tile .occupied.owned:hover {
+            background-color: rgba(0, 0, 0, 0.4); }
+        .board .chessboard .tile .occupied img {
+          width: 80%;
+          height: 80%; }
+      .board .chessboard .tile.revealed {
+        cursor: pointer; }
+        .board .chessboard .tile.revealed:after {
+          content: '';
+          width: 20px;
+          height: 20px;
+          position: absolute;
+          left: calc(50% - 10px);
+          top: calc(50% - 10px);
+          background-color: lightgreen;
+          border-radius: 50%; }
+      .board .chessboard .tile.threatened {
+        -webkit-box-shadow: inset 0px 0px 30px 1px #38e038;
+        -moz-box-shadow: inset 0px 0px 30px 1px #38e038;
+        -o-box-shadow: inset 0px 0px 30px 1px #38e038;
+        box-shadow: inset 0px 0px 30px 1px #38e038;
+        cursor: pointer; }
+      .board .chessboard .tile.special {
+        -webkit-box-shadow: inset 0px 0px 30px 1px #db8c1e;
+        -moz-box-shadow: inset 0px 0px 30px 1px #db8c1e;
+        -o-box-shadow: inset 0px 0px 30px 1px #db8c1e;
+        box-shadow: inset 0px 0px 30px 1px #db8c1e;
+        cursor: pointer; }
+  .board .chessboard-numbers {
+    width: 40px;
+    height: 100%;
+    position: absolute;
+    left: -40px;
+    top: 0;
+    font-size: 26px; }
+    .board .chessboard-numbers div {
+      height: 12.5%;
+      display: flex;
+      align-items: center;
+      justify-content: center; }
+  .board .chessboard-letters {
+    width: 100%;
+    height: 40px;
+    position: absolute;
+    display: flex;
+    align-items: center; }
+    .board .chessboard-letters div {
+      width: 12.5%;
+      font-size: 26px;
+      text-align: center; }
+  .board .tile:nth-child(2),
+  .board .tile:nth-child(4),
+  .board .tile:nth-child(6),
+  .board .tile:nth-child(8),
+  .board .tile:nth-child(9),
+  .board .tile:nth-child(11),
+  .board .tile:nth-child(13),
+  .board .tile:nth-child(15),
+  .board .tile:nth-child(18),
+  .board .tile:nth-child(20),
+  .board .tile:nth-child(22),
+  .board .tile:nth-child(24),
+  .board .tile:nth-child(25),
+  .board .tile:nth-child(27),
+  .board .tile:nth-child(29),
+  .board .tile:nth-child(31),
+  .board .tile:nth-child(34),
+  .board .tile:nth-child(36),
+  .board .tile:nth-child(38),
+  .board .tile:nth-child(40),
+  .board .tile:nth-child(41),
+  .board .tile:nth-child(43),
+  .board .tile:nth-child(45),
+  .board .tile:nth-child(47),
+  .board .tile:nth-child(50),
+  .board .tile:nth-child(52),
+  .board .tile:nth-child(54),
+  .board .tile:nth-child(56),
+  .board .tile:nth-child(57),
+  .board .tile:nth-child(59),
+  .board .tile:nth-child(61),
+  .board .tile:nth-child(63) {
+    background-color: rgba(0, 0, 0, 0.6); }
+
+.player-board,
+.enemy-board {
+  width: 250px;
+  height: 750px;
+  display: flex;
+  flex-direction: column; }
+  .player-board h2,
+  .enemy-board h2 {
+    text-align: center; }
+  .player-board .captured-pieces,
+  .enemy-board .captured-pieces {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column-reverse; }
+    .player-board .captured-pieces div,
+    .enemy-board .captured-pieces div {
+      display: flex;
+      flex-wrap: wrap-reverse; }
+      .player-board .captured-pieces div img,
+      .enemy-board .captured-pieces div img {
+        width: 50px;
+        height: 50px;
+        margin-top: 15px; }
+
+.player-board {
+  margin-left: 40px;
+  flex-direction: column-reverse; }
+
+.enemy-board {
+  margin-right: 40px; }
+
+.captured-pieces {
+  width: 50px;
+  height: 50px; }
